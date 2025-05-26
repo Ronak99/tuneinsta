@@ -8,6 +8,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
@@ -38,12 +39,26 @@ void main() async {
     }
   }
 
-  initializeServices();
+  _initializeServices();
+
+  _initializeSystemUIDefaults();
 
   runApp(const App());
 }
 
-void initializeServices() {
+
+void _initializeSystemUIDefaults() {
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+  SystemChrome.setEnabledSystemUIMode(
+    SystemUiMode.edgeToEdge,
+    overlays: SystemUiOverlay.values,
+  );
+}
+
+void _initializeServices() {
   Get.put(StorageService());
   Get.put(DbService());
 }
