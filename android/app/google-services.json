@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "579971936671",
+    "project_id": "tuneinsta-ai",
+    "storage_bucket": "tuneinsta-ai.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:579971936671:android:719bfb39a62d0215790daa",
+        "android_client_info": {
+          "package_name": "com.tuneinsta.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjPV17UAiyI7joup2PyWUteiI1GW4TO_Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
