@@ -3,17 +3,27 @@ import 'dart:io';
 import 'package:app/route_generator.dart';
 import 'package:app/services/db_service.dart';
 import 'package:app/services/storage_service.dart';
+import 'package:app/utils/routes.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'home_state.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(HomeState());
 
   void onFileChange(File? file) {
-    emit(state.copyWith(selectedFile: file));
+    emit(state.copyWith(
+      selectedFile: file,
+      selectedImage: null,
+    ));
+  }
+
+  void onImageTap(String url) {
+    emit(state.copyWith(selectedFile: null, selectedImage: url));
+    RouteGenerator.rootNavigatorKey.currentContext!.push(Routes.VIEW_IMAGE.value);
   }
 
   void onSelectFileButtonPressed() async {
@@ -25,7 +35,9 @@ class HomeCubit extends Cubit<HomeState> {
 
     if (result != null) {
       File file = File(result.files.single.path!);
-      RouteGenerator.homeCubit.onFileChange(file);
+      onFileChange(file);
+
+      RouteGenerator.rootNavigatorKey.currentContext!.push(Routes.VIEW_IMAGE.value);
     } else {
       // User canceled the picker
       Get.find<Logger>().e("No file was selected by the user.");
