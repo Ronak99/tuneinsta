@@ -1,6 +1,7 @@
 import 'package:app/ui/home/master.dart';
-import 'package:app/ui/home/state/home_cubit.dart';
+import 'package:app/ui/home/widgets/home_cubit.dart';
 import 'package:app/ui/image/master.dart';
+import 'package:app/ui/image/state/image_cubit.dart';
 import 'package:app/utils/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,9 +15,11 @@ class RouteGenerator {
 
   static BuildContext get context => rootNavigatorKey.currentContext!;
 
+  static late ImageCubit imageCubit;
   static late HomeCubit homeCubit;
 
   static void initializeCubits() {
+    imageCubit = ImageCubit();
     homeCubit = HomeCubit();
   }
 
@@ -32,6 +35,7 @@ class RouteGenerator {
           path: Routes.HOME_SCREEN.value,
           builder: (context, state) => MultiBlocProvider(
             providers: [
+              BlocProvider.value(value: imageCubit),
               BlocProvider.value(value: homeCubit),
             ],
             child: const HomePage(),
@@ -41,7 +45,7 @@ class RouteGenerator {
           path: Routes.VIEW_IMAGE.value,
           builder: (context, state) =>MultiBlocProvider(
             providers: [
-              BlocProvider.value(value: homeCubit),
+              BlocProvider.value(value: imageCubit),
             ],
             child: const ViewImagePage(),
           ),
