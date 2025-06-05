@@ -19,6 +19,8 @@ class ImageCubit extends Cubit<ImageState> {
   void onFileChange(File? file) {
     if (file == null) return;
 
+    emit(state.copyWith(selectedTask: Task.empty()));
+
     emit(state.copyWith(
       selectedTask: state.selectedTask.copyWith(
         file: file,
@@ -27,14 +29,9 @@ class ImageCubit extends Cubit<ImageState> {
     ));
   }
 
-  void onImageTap(String url) {
+  void onTaskTap(Task task) {
     emit(
-      state.copyWith(
-        selectedTask: state.selectedTask.copyWith(
-          imageUrl: url,
-          file: null,
-        ),
-      ),
+      state.copyWith(selectedTask: task),
     );
 
     RouteGenerator.rootNavigatorKey.currentContext!

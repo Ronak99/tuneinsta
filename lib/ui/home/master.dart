@@ -81,14 +81,17 @@ class HomePage extends StatelessWidget {
                           ),
                         ]),
                     child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: GestureDetector(
-                              onTap: () => context
-                                  .read<ImageCubit>()
-                                  .onImageTap(task.imageUrl),
-                              child: CachedImage(task.imageUrl,fit: BoxFit.cover,),
-                            ),
-                          ),
+                      borderRadius: BorderRadius.circular(8),
+                      child: GestureDetector(
+                        onTap: () => context
+                            .read<ImageCubit>()
+                            .onTaskTap(task),
+                        child: CachedImage(
+                          task.imageUrl,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
                   );
                 },
               );

@@ -23,7 +23,7 @@ void main() async {
 
   Get.put(Logger());
 
-  if (false) {
+  if (kDebugMode) {
     Get.find<Logger>().d("Using Firebase Emulator");
     try {
       final emulatorHost = defaultTargetPlatform == TargetPlatform.android

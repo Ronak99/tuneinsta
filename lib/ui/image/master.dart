@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:app/models/song/Song.dart';
 import 'package:app/ui/image/state/image_cubit.dart';
 import 'package:app/ui/image/state/image_state.dart';
+import 'package:app/ui/image/widgets/audio_player_view.dart';
 import 'package:app/ui/widgets/cached_image.dart';
 import 'package:app/utils/task_status.dart';
 import 'package:flutter/material.dart';
@@ -97,6 +98,8 @@ class DockView extends StatelessWidget {
             switch (state.selectedTask.status) {
               case TaskStatus.initial:
                 return const Text('initial');
+              case TaskStatus.error:
+                return const Text('error occurred');
               case TaskStatus.uploading:
                 return const Text('uploading');
               case TaskStatus.processing:
@@ -132,69 +135,14 @@ class SongsView extends StatelessWidget {
             itemBuilder: (context, index) {
               Song song = songs[index];
 
-              return Container(
-                width: double.infinity,
-                margin: const EdgeInsets.only(
-                  left: 12,
-                  right: 12,
-                  bottom: 12,
-                ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.black45,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  children: [
-                    CachedImage(
-                      'https://www.picsum.photos/50',
-                      radius: 100,
-                    ),
-                    SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            song.title,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          SizedBox(height: 4),
-                          Text(
-                            song.artist,
-                            style: TextStyle(
-                              color: Colors.white54,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(width: 12),
-                    Icon(
-                      Icons.play_arrow_rounded,
-                      color: Colors.white,
-                      size: 45,
-                    ),
-                  ],
-                ),
-              );
+              return AudioPlayerView(song: song);
             },
           ),
         ),
         SmoothPageIndicator(
           controller: pageController,
           count: songs.length,
-          effect: ExpandingDotsEffect(
+          effect: const ExpandingDotsEffect(
             dotColor: Colors.white70,
             activeDotColor: Colors.white,
             dotWidth: 4,
@@ -204,7 +152,7 @@ class SongsView extends StatelessWidget {
             spacing: 4,
           ),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
       ],
     );
   }
@@ -227,7 +175,7 @@ class _ImageViewState extends State<ImageView> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ImageCubit, ImageState>(builder: (context, state) {
-      if (state.selectedTask.isLocalImage) {
+      if (state.selectedTask.file != null) {
         return Image.file(
           state.selectedTask.file!,
           fit: BoxFit.cover,
@@ -237,9 +185,10 @@ class _ImageViewState extends State<ImageView> {
         return CachedImage(
           state.selectedTask.imageUrl,
           fit: BoxFit.cover,
+
         );
       }
-      return Text("oops");
+      return const Text("oops");
     });
   }
 }
