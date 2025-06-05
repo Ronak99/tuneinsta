@@ -11,4 +11,7 @@ enum TaskStatus {
 
   // songs have been populated
   complete,
+
+  // error
+  error,
 }
