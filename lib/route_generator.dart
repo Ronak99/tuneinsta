@@ -1,5 +1,5 @@
 import 'package:app/ui/home/master.dart';
-import 'package:app/ui/home/widgets/home_cubit.dart';
+import 'package:app/ui/home/state/home_cubit.dart';
 import 'package:app/ui/image/master.dart';
 import 'package:app/ui/image/state/image_cubit.dart';
 import 'package:app/utils/routes.dart';

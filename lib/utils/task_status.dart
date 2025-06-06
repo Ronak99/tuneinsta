@@ -14,4 +14,7 @@ enum TaskStatus {
 
   // error
   error,
+
+  // curating
+  curating,
 }

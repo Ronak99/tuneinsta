@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:app/models/task/Task.dart';
@@ -14,7 +15,21 @@ import 'package:logger/logger.dart';
 import 'package:go_router/go_router.dart';
 
 class ImageCubit extends Cubit<ImageState> {
+  // top-level stream
+  StreamSubscription<Task>? taskStream;
+
   ImageCubit() : super(ImageState(selectedTask: Task.empty()));
+
+  void initializeStream() {
+    // cancel any ongoing stream
+    taskStream?.cancel();
+
+    // initialize a new stream if it exists
+    taskStream =
+        Get.find<DbService>().streamTask(state.selectedTask.id).listen((task) {
+      emit(state.copyWith(selectedTask: task));
+    });
+  }
 
   void onFileChange(File? file) {
     if (file == null) return;
@@ -30,15 +45,20 @@ class ImageCubit extends Cubit<ImageState> {
   }
 
   void onTaskTap(Task task) {
-    emit(
-      state.copyWith(selectedTask: task),
-    );
+    emit(state.copyWith(selectedTask: task));
 
     RouteGenerator.rootNavigatorKey.currentContext!
         .push(Routes.VIEW_IMAGE.value);
   }
 
   void onSelectFileButtonPressed() async {
+    // when user taps upload button, even though an empty task is available
+    // it means that the image is being uploaded and the record has not been created.
+    if (state.selectedTask.status == TaskStatus.uploading) {
+      Get.find<Logger>().e("Image is being uploaded, please wait...");
+      return;
+    }
+
     // check for permissions
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: false,
@@ -57,7 +77,7 @@ class ImageCubit extends Cubit<ImageState> {
     }
   }
 
-  void onUploadFileButtonPressed() async {
+  void onImageViewInit() async {
     // can't upload if not a local image
     if (!state.selectedTask.isLocalImage) return;
 
@@ -80,50 +100,29 @@ class ImageCubit extends Cubit<ImageState> {
     const String mimeType = "image/jpeg";
     String uploadPath = "$folder/$fileNameWithExt";
 
-    UploadResponse? response = await storageService.uploadPicture(
-      file: file,
-      uploadPath: uploadPath,
-      mimeType: mimeType,
-    );
-
-    // update a few aspects of the task that are now known.
-    emit(
-      state.copyWith(
-        selectedTask: state.selectedTask.copyWith(
-          status: TaskStatus.processing,
-          bucket: response.bucket,
-          fileUploadPath: uploadPath,
-          imageUrl: response.downloadUrl,
-          createdOn: DateTime.now().millisecondsSinceEpoch,
-        ),
-      ),
-    );
-
-    // create task within firestore
     try {
-      await dbService.createTask(state.selectedTask);
-    } catch (e) {
-      print(e);
-    }
+      UploadResponse? response = await storageService.uploadPicture(
+        file: file,
+        uploadPath: uploadPath,
+        mimeType: mimeType,
+      );
 
-    // add the task on home page
-    RouteGenerator.homeCubit.addTask(state.selectedTask);
+      // update a few aspects of the task that are now known.
+      final updatedTask = state.selectedTask.copyWith(
+        status: TaskStatus.processing,
+        bucket: response.bucket,
+        fileUploadPath: uploadPath,
+        imageUrl: response.downloadUrl,
+        createdOn: DateTime.now().millisecondsSinceEpoch,
+      );
 
-    // extract songs
-    try {
+      // create task within firestore
+      await dbService.createTask(updatedTask);
+      emit(state.copyWith(selectedTask: updatedTask));
+      initializeStream();
+
+      // extract songs
       await dbService.extractSongs(state.selectedTask.id);
-    } catch (e) {
-      print(e);
-    }
-
-    // fetch the added songs
-    Task updatedTask = await dbService.getTask(state.selectedTask.id);
-
-    // emit the new updated task with the songs data
-    emit(state.copyWith(selectedTask: updatedTask));
-  }
-
-  void makeTestFirestoreRecord() {
-    Get.find<DbService>().makeTestFirestoreRecord();
+    } catch (e) {}
   }
 }

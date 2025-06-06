@@ -12,14 +12,6 @@ class DbService {
           fromFirestore: (data, _) => Task.fromJson(data.data()!),
           toFirestore: (task, options) => task.toJson());
 
-  void makeTestFirestoreRecord() async {
-    try {
-      _firestore.collection('uploads').add({"key": "value"});
-    } catch (e) {
-      Get.find<Logger>().e("Error occurred with Firestore.");
-    }
-  }
-
   Future<void> createTask(Task task) async {
     try {
       await taskCollectionReference.doc(task.id).set(task);
@@ -51,7 +43,14 @@ class DbService {
         .get();
   }
 
-  Stream<Task> taskStream(String taskId) => taskCollectionReference
+  Stream<List<Task>> streamTasks(String deviceId) => taskCollectionReference
+      .where('created_by', isEqualTo: deviceId)
+      .orderBy('created_on', descending: true)
+      .limit(10)
+      .snapshots()
+      .map((snapshot) => snapshot.docs.map((e) => e.data()).toList());
+
+  Stream<Task> streamTask(String taskId) => taskCollectionReference
       .doc(taskId)
       .snapshots()
       .where((snapshot) => snapshot.exists)

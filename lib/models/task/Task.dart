@@ -30,6 +30,7 @@ class Task with _$Task {
   const Task._();
 
   bool get isLocalImage => !imageUrl.startsWith('http');
+  bool get isEmpty => id.isEmpty;
 
   factory Task.fromJson(Map<String, dynamic> json) => _$TaskFromJson(json);
 

@@ -23,19 +23,19 @@ void main() async {
 
   Get.put(Logger());
 
-  if (kDebugMode) {
-    Get.find<Logger>().d("Using Firebase Emulator");
-    try {
-      final emulatorHost = defaultTargetPlatform == TargetPlatform.android
-          ? "localhost"
-          : "localhost";
-      FirebaseFirestore.instance.useFirestoreEmulator(emulatorHost, 8080);
-      FirebaseStorage.instance.useStorageEmulator(emulatorHost, 9199);
-      FirebaseFunctions.instance.useFunctionsEmulator(emulatorHost, 5001);
-    } catch (e) {
-      Get.find<Logger>().e(e);
-    }
-  }
+  // if (kDebugMode) {
+  //   Get.find<Logger>().d("Using Firebase Emulator");
+  //   try {
+  //     final emulatorHost = defaultTargetPlatform == TargetPlatform.android
+  //         ? "localhost"
+  //         : "localhost";
+  //     FirebaseFirestore.instance.useFirestoreEmulator(emulatorHost, 8080);
+  //     FirebaseStorage.instance.useStorageEmulator(emulatorHost, 9199);
+  //     FirebaseFunctions.instance.useFunctionsEmulator(emulatorHost, 5001);
+  //   } catch (e) {
+  //     Get.find<Logger>().e(e);
+  //   }
+  // }
 
 
   // init

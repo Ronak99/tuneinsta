@@ -1,13 +1,11 @@
 import 'package:app/models/task/Task.dart';
-import 'package:app/services/db_service.dart';
-import 'package:app/ui/home/widgets/home_cubit.dart';
-import 'package:app/ui/home/widgets/home_state.dart';
+import 'package:app/ui/home/state/home_cubit.dart';
+import 'package:app/ui/home/state/home_state.dart';
+import 'package:app/ui/home/widgets/task_card.dart';
 import 'package:app/ui/image/state/image_cubit.dart';
-import 'package:app/ui/widgets/cached_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -36,7 +34,7 @@ class HomePage extends StatelessWidget {
       body: Container(
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
         ),
         child: SizedBox(
           width: double.infinity,
@@ -66,33 +64,7 @@ class HomePage extends StatelessWidget {
                 itemCount: state.tasks.length,
                 itemBuilder: (context, index) {
                   final Task task = state.tasks[index];
-
-                  return Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black12,
-                            spreadRadius: 0,
-                            blurRadius: 4,
-                            offset: Offset(0, 0),
-                          ),
-                        ]),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: GestureDetector(
-                        onTap: () => context
-                            .read<ImageCubit>()
-                            .onTaskTap(task),
-                        child: CachedImage(
-                          task.imageUrl,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                  );
+                  return TaskCard(task: task);
                 },
               );
             },

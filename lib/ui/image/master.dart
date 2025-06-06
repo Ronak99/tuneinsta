@@ -100,6 +100,8 @@ class DockView extends StatelessWidget {
                 return const Text('initial');
               case TaskStatus.error:
                 return const Text('error occurred');
+              case TaskStatus.curating:
+                return const Text('curating');
               case TaskStatus.uploading:
                 return const Text('uploading');
               case TaskStatus.processing:
@@ -169,26 +171,26 @@ class _ImageViewState extends State<ImageView> {
   @override
   void initState() {
     super.initState();
-    context.read<ImageCubit>().onUploadFileButtonPressed();
+    context.read<ImageCubit>().onImageViewInit();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ImageCubit, ImageState>(builder: (context, state) {
-      if (state.selectedTask.file != null) {
-        return Image.file(
-          state.selectedTask.file!,
-          fit: BoxFit.cover,
-        );
-      }
-      if (!state.selectedTask.isLocalImage) {
-        return CachedImage(
-          state.selectedTask.imageUrl,
-          fit: BoxFit.cover,
+    final imageState = context.read<ImageCubit>().state;
 
-        );
-      }
-      return const Text("oops");
-    });
+    if (imageState.selectedTask.file != null) {
+      return Image.file(
+        imageState.selectedTask.file!,
+        fit: BoxFit.cover,
+      );
+    }
+    if (!imageState.selectedTask.isLocalImage) {
+      return CachedImage(
+        imageState.selectedTask.imageUrl,
+        fit: BoxFit.cover,
+      );
+    }
+
+    return const SizedBox.shrink();
   }
 }
