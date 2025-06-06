@@ -93,6 +93,9 @@ flutter:
           weight: 700
         - asset: fonts/SFUIText-Heavy.ttf
           weight: 800
+
+  assets:
+    - path: "assets/"
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package

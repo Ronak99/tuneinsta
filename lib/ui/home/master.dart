@@ -7,6 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'widgets/empty_state.dart';
+
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -24,10 +26,15 @@ class HomePage extends StatelessWidget {
         ),
         scrolledUnderElevation: 0,
         actions: [
-          ElevatedButton(
-            onPressed: context.read<ImageCubit>().onSelectFileButtonPressed,
-            child: const Text("Upload"),
-          ),
+          BlocBuilder<HomeCubit, HomeState>(builder: (context, state) {
+            if (state.tasks.isNotEmpty) {
+              return ElevatedButton(
+                onPressed: context.read<ImageCubit>().onSelectFileButtonPressed,
+                child: const Text("Upload"),
+              );
+            }
+            return const SizedBox.shrink();
+          }),
           const SizedBox(width: 12),
         ],
       ),
@@ -45,9 +52,7 @@ class HomePage extends StatelessWidget {
                   child: CupertinoActivityIndicator(),
                 );
               } else if (state.tasks.isEmpty) {
-                return const Center(
-                  child: Text('Find the right tune to your images'),
-                );
+                return const EmptyState();
               }
               return GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
