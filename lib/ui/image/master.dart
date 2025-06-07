@@ -4,6 +4,7 @@ import 'package:app/models/song/Song.dart';
 import 'package:app/ui/image/state/image_cubit.dart';
 import 'package:app/ui/image/state/image_state.dart';
 import 'package:app/ui/image/widgets/audio_player_view.dart';
+import 'package:app/ui/image/widgets/dock_view.dart';
 import 'package:app/ui/widgets/cached_image.dart';
 import 'package:app/utils/task_status.dart';
 import 'package:flutter/material.dart';
@@ -32,10 +33,21 @@ class ViewImagePage extends StatelessWidget {
               icon: Icons.arrow_back_ios_rounded,
             ),
             const Spacer(),
-            _buildActionButton(
-              onPressed: () => {},
-              icon: Icons.ios_share,
-            ),
+            BlocBuilder<ImageCubit, ImageState>(builder: (context, state) {
+              return AnimatedOpacity(
+                opacity:
+                    state.selectedTask.status == TaskStatus.complete ? 1 : 0,
+                duration: const Duration(milliseconds: 350),
+                child: _buildActionButton(
+                  onPressed: () {
+                    if (state.selectedTask.status != TaskStatus.complete) {
+                      return;
+                    }
+                  },
+                  icon: Icons.ios_share,
+                ),
+              );
+            }),
           ],
         ),
       ),
@@ -77,85 +89,6 @@ class ViewImagePage extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class DockView extends StatelessWidget {
-  const DockView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<ImageCubit, ImageState>(builder: (context, state) {
-      return Align(
-        alignment: Alignment.bottomCenter,
-        child: Container(
-          height: 100,
-          margin: EdgeInsets.only(
-            bottom: MediaQuery.of(context).padding.bottom + 4,
-          ),
-          child: Builder(builder: (context) {
-            switch (state.selectedTask.status) {
-              case TaskStatus.initial:
-                return const Text('initial');
-              case TaskStatus.error:
-                return const Text('error occurred');
-              case TaskStatus.curating:
-                return const Text('curating');
-              case TaskStatus.uploading:
-                return const Text('uploading');
-              case TaskStatus.processing:
-                return const Text('AI doing its thing');
-              case TaskStatus.complete:
-                return SongsView(
-                  songs: state.selectedTask.songs,
-                );
-            }
-          }),
-        ),
-      );
-    });
-  }
-}
-
-class SongsView extends StatelessWidget {
-  final List<Song> songs;
-
-  const SongsView({super.key, required this.songs});
-
-  @override
-  Widget build(BuildContext context) {
-    final pageController = PageController();
-
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Expanded(
-          child: PageView.builder(
-            itemCount: songs.length,
-            controller: pageController,
-            itemBuilder: (context, index) {
-              Song song = songs[index];
-
-              return AudioPlayerView(song: song);
-            },
-          ),
-        ),
-        SmoothPageIndicator(
-          controller: pageController,
-          count: songs.length,
-          effect: const ExpandingDotsEffect(
-            dotColor: Colors.white70,
-            activeDotColor: Colors.white,
-            dotWidth: 4,
-            dotHeight: 4,
-            radius: 12,
-            expansionFactor: 3,
-            spacing: 4,
-          ),
-        ),
-        const SizedBox(height: 8),
-      ],
     );
   }
 }
