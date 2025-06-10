@@ -43,5 +43,5 @@ app.*.map.json
 /android/app/release
 /android/fastlane/tuneinsta-ai-7183bfc94be8.json
 
-legacy-build-workflow.yml
 upload-keystore.jks
+legacy-build-workflow.yml

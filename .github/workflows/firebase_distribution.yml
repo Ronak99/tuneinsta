@@ -1,0 +1,80 @@
+name: Firebase Distribution
+
+on:
+  push:
+    branches:
+      - "staging"
+    tags:
+      - "publish-firebase"
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Common
+  ssh_key: ${{ secrets.ACTIONS_SSH_KEY }}
+  prod_env_base64: ${{ secrets.PROD_ENV_BASE64 }}
+  flutter_version: ${{ vars.FLUTTER_VERSION }}
+  shorebird_token: ${{ secrets.SHOREBIRD_TOKEN }}
+  # Android
+  play_store_upload_key_base64: ${{ secrets.APP_JKS }}
+  keystore_key_alias: ${{ secrets.KEYSTORE_KEY_ALIAS }}
+  keystore_key_password: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
+  keystore_store_password: ${{ secrets.KEYSTORE_STORE_PASSWORD }}
+  service_account_json: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+  maps_api_key: ${{ secrets.MAPS_API_KEY }}
+
+jobs:
+  github_setup:
+    permissions: write-all
+    name: "GitHub Setup"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Git: Checkout"
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: "Git: Delete Trigger Tag"
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          git fetch --tags
+          git tag -d ${{ github.ref_name }}
+          git push origin :${{ github.ref_name }}
+
+  firebase_distribution_android:
+    permissions: write-all
+    name: "Android"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: "Environment: Setup (Android)"
+        uses: ./.github/actions/setup_android_environment
+        with:
+          use_shorebird: "false"
+
+      - name: "Changelog: Logging"
+        run: |
+          fastlane android summarize_commits
+        shell: bash
+        working-directory: android
+
+      - name: "Set Version Variables"
+        run: |
+          echo "NEXT_BUILD_NUMBER=$(python .github/scripts/firebase_version.py)" >> $GITHUB_ENV
+          echo "NEXT_BUILD_NAME=$(python .github/scripts/firebase_build_name.py)" >> $GITHUB_ENV
+
+      - name: "Build App Bundle"
+        run: flutter build appbundle --build-name=${{ env.NEXT_BUILD_NAME }} --build-number=${{ env.NEXT_BUILD_NUMBER }}
+
+      - name: "Firebase App Distribution"
+        working-directory: android
+        run: |
+          fastlane android firebase_distribution
+        env:
+          NEXT_BUILD_NAME: ${{ env.NEXT_BUILD_NAME }}
+          NEXT_BUILD_NUMBER: ${{ env.NEXT_BUILD_NUMBER }}
