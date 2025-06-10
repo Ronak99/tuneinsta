@@ -42,7 +42,7 @@ jobs:
   firebase_distribution_android:
     permissions: write-all
     name: "Android"
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
       - uses: actions/checkout@v3
