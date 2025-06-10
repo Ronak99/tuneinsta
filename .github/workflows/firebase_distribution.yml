@@ -12,16 +12,13 @@ env:
 
   # Common
   ssh_key: ${{ secrets.ACTIONS_SSH_KEY }}
-  prod_env_base64: ${{ secrets.PROD_ENV_BASE64 }}
   flutter_version: ${{ vars.FLUTTER_VERSION }}
-  shorebird_token: ${{ secrets.SHOREBIRD_TOKEN }}
   # Android
   play_store_upload_key_base64: ${{ secrets.APP_JKS }}
   keystore_key_alias: ${{ secrets.KEYSTORE_KEY_ALIAS }}
   keystore_key_password: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
   keystore_store_password: ${{ secrets.KEYSTORE_STORE_PASSWORD }}
   service_account_json: ${{ secrets.SERVICE_ACCOUNT_JSON }}
-  maps_api_key: ${{ secrets.MAPS_API_KEY }}
 
 jobs:
   github_setup:

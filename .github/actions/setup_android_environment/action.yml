@@ -32,12 +32,6 @@ runs:
     - name: "Environment: Shorebird"
       if: ${{ inputs.use_shorebird == 'true' }}
       uses: shorebirdtech/setup-shorebird@v1
-    - name: "Environment: Production .env"
-      run: |
-        echo "${{ env.prod_env_base64 }}" | base64 --decode > "env/prod.env"
-        touch .env
-        ./build.sh prod
-      shell: bash
     - name: "Environment: Keystore"
       run: |
         echo ${{ env.play_store_upload_key_base64 }} | base64 --decode > "app/keystore.jks"
@@ -46,12 +40,6 @@ runs:
         echo "keyAlias=${{ env.keystore_key_alias }}" >> key.properties
         echo "keyPassword=${{ env.keystore_key_password }}" >> key.properties
         echo "storePassword=${{ env.keystore_store_password }}" >> key.properties
-      shell: bash
-      working-directory: android
-    - name: "Environment: Maps API Key"
-      run: |
-        echo "MAPS_API_KEY=${{ env.maps_api_key }}" >> local.properties
-        echo ${{env.maps_api_key}} | sed 's/./& /g'
       shell: bash
       working-directory: android
     - name: "Get Flutter Dependencies"
