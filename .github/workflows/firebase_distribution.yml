@@ -42,7 +42,7 @@ jobs:
   firebase_distribution_android:
     permissions: write-all
     name: "Android"
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
@@ -53,3 +53,26 @@ jobs:
         uses: ./.github/actions/setup_android_environment
         with:
           use_shorebird: "false"
+
+      - name: "Changelog: Logging"
+        run: |
+          fastlane android summarize_commits
+        shell: bash
+        working-directory: android
+
+      - name: "Set Version Variables"
+        run: |
+          echo "NEXT_BUILD_NUMBER=$(python .github/scripts/firebase_version.py)" >> $GITHUB_ENV
+          echo "NEXT_BUILD_NAME=$(python .github/scripts/firebase_build_name.py)" >> $GITHUB_ENV
+
+      - name: "Build App Bundle"
+        run: flutter build appbundle --build-name=${{ env.NEXT_BUILD_NAME }} --build-number=${{ env.NEXT_BUILD_NUMBER }}
+
+      - name: "Firebase App Distribution"
+        working-directory: android
+        run: |
+          fastlane android firebase_distribution
+        env:
+          SLACK_USER: ${{ vars.SLACK_USER }}
+          NEXT_BUILD_NAME: ${{ env.NEXT_BUILD_NAME }}
+          NEXT_BUILD_NUMBER: ${{ env.NEXT_BUILD_NUMBER }}
