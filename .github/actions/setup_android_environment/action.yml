@@ -49,7 +49,5 @@ runs:
     - name: "Environment: Fastlane"
       run: |
         gem install fastlane
-        echo ${{ env.service_account_json }} | base64 --decode > "fastlane/service_key.json"
-        echo "json_key_file(\"fastlane/service_key.json\")" >> fastlane/Appfile
       shell: bash
       working-directory: android
