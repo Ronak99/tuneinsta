@@ -51,7 +51,7 @@ platform :android do
       groups: "internal",
       android_artifact_path: "../build/app/outputs/bundle/release/app-release.aab",
       android_artifact_type: "AAB",
-      service_credentials_file: "./fastlane/tuneinsta-ai-7183bfc94be8.json",
+      service_credentials_file: "./fastlane/service_key.json",
       release_notes: "release_notes"
     )
   end
