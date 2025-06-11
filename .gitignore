@@ -45,3 +45,4 @@ app.*.map.json
 
 upload-keystore.jks
 legacy-build-workflow.yml
+.ssh
