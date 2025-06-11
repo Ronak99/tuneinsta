@@ -13,7 +13,6 @@ env:
   # Common
   ssh_key: ${{ secrets.ACTIONS_SSH_KEY }}
   flutter_version: ${{ vars.FLUTTER_VERSION }}
-
   # Android
   play_store_upload_key_base64: ${{ secrets.APP_JKS }}
   keystore_key_alias: ${{ secrets.KEYSTORE_KEY_ALIAS }}
@@ -43,7 +42,7 @@ jobs:
   firebase_distribution_android:
     permissions: write-all
     name: "Android"
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
       - uses: actions/checkout@v3

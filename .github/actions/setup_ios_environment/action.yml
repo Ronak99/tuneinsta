@@ -33,12 +33,6 @@ runs:
       if: ${{ inputs.use_shorebird != 'true' }}
       shell: bash
       run: flutter pub get
-    - name: "Environment: Production .env"
-      run: |
-        echo "${{ env.prod_env_base64 }}" | base64 --decode > "env/prod.env"
-        touch .env
-        ./build.sh prod
-      shell: bash
     - name: "Flutter: Build iOS App"
       if: ${{ inputs.use_shorebird != 'true' }}
       shell: bash

@@ -5,6 +5,10 @@ inputs:
     description: "Whether to setup Shorebird."
     required: false
     default: "true"
+  service_account_json:
+    description: "Service Account"
+    required: true
+
 runs:
   using: "composite"
   steps:
