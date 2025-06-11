@@ -12,52 +12,6 @@ runs:
       uses: webfactory/ssh-agent@v0.9.0
       with:
         ssh-private-key: ${{ env.ssh_key }}
-    - name: "Environment: Java"
-      uses: actions/setup-java@v4
-      with:
-        java-version: "17"
-        distribution: "adopt"
-    - name: "Environment: Ruby"
-      # NOTE: Do not run this step on macOS. This version of Ruby may conflict with CocoaPods.
-      if: ${{ runner.os != 'macOS' }}
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: "3.2.5"
-    - name: "Environment: Flutter"
-      if: ${{ inputs.use_shorebird != 'true' }}
-      uses: subosito/flutter-action@v2
-      with:
-        flutter-version: ${{ env.flutter_version }}
-        channel: "stable"
-    - name: "Environment: Shorebird"
-      if: ${{ inputs.use_shorebird == 'true' }}
-      uses: shorebirdtech/setup-shorebird@v1
-    - name: "Environment: Production .env"
-      run: |
-        echo "${{ env.prod_env_base64 }}" | base64 --decode > "env/prod.env"
-        touch .env
-        ./build.sh prod
-      shell: bash
-    - name: "Environment: Keystore"
-      run: |
-        echo ${{ env.play_store_upload_key_base64 }} | base64 --decode > "app/keystore.jks"
-        keytool -list -v -keystore "app/keystore.jks" -storepass ${{ env.keystore_store_password }}
-        echo "storeFile=keystore.jks" >> key.properties
-        echo "keyAlias=${{ env.keystore_key_alias }}" >> key.properties
-        echo "keyPassword=${{ env.keystore_key_password }}" >> key.properties
-        echo "storePassword=${{ env.keystore_store_password }}" >> key.properties
-      shell: bash
-      working-directory: android
-    - name: "Environment: Maps API Key"
-      run: |
-        echo "MAPS_API_KEY=${{ env.maps_api_key }}" >> local.properties
-        echo ${{env.maps_api_key}} | sed 's/./& /g'
-      shell: bash
-      working-directory: android
-    - name: "Get Flutter Dependencies"
-      if: ${{ inputs.use_shorebird != 'true' }}
-      shell: bash
-      run: flutter pub get
     - name: "Environment: Fastlane"
       run: |
         gem install fastlane
