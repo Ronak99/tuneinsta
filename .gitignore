@@ -42,7 +42,8 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 /android/fastlane/tuneinsta-ai-7183bfc94be8.json
+/android/fastlane/my_service_key.json
 
 upload-keystore.jks
 legacy-build-workflow.yml
-.ssh
+.ssh*

@@ -53,4 +53,3 @@ jobs:
         uses: ./.github/actions/setup_android_environment
         with:
           use_shorebird: "false"
-          service_account_json: ${{ secrets.SERVICE_ACCOUNT_JSON }}
