@@ -93,7 +93,8 @@ flutter:
           weight: 800
 
   assets:
-    - path: "assets/"
+    - path: "assets\/"
+    - shorebird.yaml
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
