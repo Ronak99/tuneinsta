@@ -1,0 +1,88 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+  lane :summarize_commits do
+    second_last_git_tag = sh('git tag --sort=-creatordate | sed -n 2p', log: false).strip
+    changelog = changelog_from_git_commits(
+      between: [second_last_git_tag, last_git_tag],
+      pretty: "- %s",
+      date_format: "short",
+      match_lightweight_tag: false,
+      merge_commit_filtering: "exclude_merges"
+    )
+    processed_changelog = process_changelog(changelog)
+    puts processed_changelog
+    processed_changelog
+  end
+
+  desc "Submit a new Beta Build to Crashlytics Beta"
+  lane :beta do
+    gradle(task: "clean assembleRelease")
+    crashlytics
+  
+    # sh "your_script.sh"
+    # You can also use other beta testing services here
+  end
+
+  desc "Deploy a new version to the Google Play"
+  lane :deploy do
+    gradle(task: "clean assembleRelease")
+    upload_to_play_store
+  end
+
+  lane :firebase_distribution do
+    firebase_app_distribution(
+      app: "1:579971936671:android:719bfb39a62d0215790daa",
+      groups: "internal",
+      android_artifact_path: "../build/app/outputs/bundle/release/app-release.aab",
+      android_artifact_type: "AAB",
+      service_credentials_file: "./fastlane/service_key.json",
+      release_notes: "release_notes"
+    )
+  end
+end
+
+
+def process_changelog(changelog)
+  puts "Processing changelog"
+  # Return empty string if no changelog
+  if changelog.empty?
+    return ""
+  end
+
+  changes = { feature: [], fix: [], critical: [], other: [] }
+
+  changelog.split("\n").each do |line|
+    if line.include?("!:")
+      changes[:critical] << line.sub("- !:", "").strip
+    elsif line.include?("feat:")
+      changes[:feature] << line.sub("- feat:", "").strip
+    elsif line.include?("fix:")
+      changes[:fix] << line.sub("- fix:", "").strip
+    else
+      changes[:other] << line.sub("", "").strip
+    end
+  end
+
+  [
+    changes[:critical].empty? ? nil : "🚨 Critical Changes:\n#{changes[:critical].join("\n")}",
+    changes[:feature].empty? ? nil : "🚀 New Features:\n#{changes[:feature].join("\n")}",
+    changes[:fix].empty? ? nil : "🐛 Bug Fixes:\n#{changes[:fix].join("\n")}",
+    changes[:other].empty? ? nil : "🔧 Other Changes:\n#{changes[:other].join("\n")}"
+  ].compact.join("\n\n")
+end
