@@ -1,6 +1,7 @@
 enum Routes {
   HOME_SCREEN,
   VIEW_IMAGE,
+  DOCK_TEST,
 }
 
 extension RoutesExt on Routes {

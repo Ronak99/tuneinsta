@@ -12,11 +12,9 @@ class SongsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final pageController = PageController();
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
+    return Stack(
       children: [
-        Expanded(
-          child: PageView.builder(
+         PageView.builder(
             itemCount: songs.length,
             controller: pageController,
             itemBuilder: (context, index) {
@@ -25,21 +23,26 @@ class SongsView extends StatelessWidget {
               return AudioPlayerView(song: song);
             },
           ),
-        ),
-        SmoothPageIndicator(
-          controller: pageController,
-          count: songs.length,
-          effect: const ExpandingDotsEffect(
-            dotColor: Colors.white70,
-            activeDotColor: Colors.white,
-            dotWidth: 4,
-            dotHeight: 4,
-            radius: 12,
-            expansionFactor: 3,
-            spacing: 4,
+        if (songs.isNotEmpty)
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 8, left: 50),
+              child: SmoothPageIndicator(
+                controller: pageController,
+                count: songs.length,
+                effect: const ExpandingDotsEffect(
+                  dotColor: Colors.white70,
+                  activeDotColor: Colors.white,
+                  dotWidth: 4,
+                  dotHeight: 4,
+                  radius: 12,
+                  expansionFactor: 3,
+                  spacing: 4,
+                ),
+              ),
+            ),
           ),
-        ),
-        const SizedBox(height: 8),
       ],
     );
   }

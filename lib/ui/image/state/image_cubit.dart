@@ -47,6 +47,8 @@ class ImageCubit extends Cubit<ImageState> {
   void onTaskTap(Task task) {
     emit(state.copyWith(selectedTask: task));
 
+    initializeStream();
+
     RouteGenerator.rootNavigatorKey.currentContext!
         .push(Routes.VIEW_IMAGE.value);
   }

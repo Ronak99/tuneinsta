@@ -1,16 +1,14 @@
-import 'dart:io';
-
-import 'package:app/models/song/Song.dart';
+import 'package:app/majestic/ui/grid_background/grid_background.dart';
 import 'package:app/ui/image/state/image_cubit.dart';
 import 'package:app/ui/image/state/image_state.dart';
-import 'package:app/ui/image/widgets/audio_player_view.dart';
-import 'package:app/ui/image/widgets/dock_view.dart';
 import 'package:app/ui/widgets/cached_image.dart';
 import 'package:app/utils/task_status.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
+import 'widgets/dock/animated_dock_view.dart';
 
 class ViewImagePage extends StatelessWidget {
   const ViewImagePage({
@@ -35,12 +33,11 @@ class ViewImagePage extends StatelessWidget {
             const Spacer(),
             BlocBuilder<ImageCubit, ImageState>(builder: (context, state) {
               return AnimatedOpacity(
-                opacity:
-                    state.selectedTask.status == TaskStatus.complete ? 1 : 0,
+                opacity: state.selectedTask.isComplete ? 1 : 0,
                 duration: const Duration(milliseconds: 350),
                 child: _buildActionButton(
                   onPressed: () {
-                    if (state.selectedTask.status != TaskStatus.complete) {
+                    if (state.selectedTask.isComplete) {
                       return;
                     }
                   },
@@ -80,13 +77,37 @@ class ViewImagePage extends StatelessWidget {
     return Scaffold(
       body: SizedBox(
         height: double.infinity,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            const ImageView(),
-            _buildTopBar(context),
-            const DockView(),
-          ],
+        child: BlocBuilder<ImageCubit, ImageState>(
+          builder: (context, state) {
+            return Stack(
+              fit: StackFit.expand,
+              children: [
+                const ImageView(),
+                  AnimatedOpacity(
+                    opacity: state.selectedTask.status == TaskStatus.curating || state.selectedTask.status == TaskStatus.processing
+                        ? 1
+                        : 0,
+                    duration: const Duration(milliseconds: 350),
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.black45,
+                      ),
+                      child: GridBackground(
+                        animationColor: CupertinoColors.white.withOpacity(.6),
+                        gridColor: CupertinoColors.activeBlue.withOpacity(.2),
+                        gridSpacing: 4,
+                        child: Container(),
+                      ),
+                    ),
+                  ),
+                AnimatedDockView(
+                  taskStatus: state.selectedTask.status,
+                  songs: state.selectedTask.songs,
+                ),
+                _buildTopBar(context),
+              ],
+            );
+          },
         ),
       ),
     );

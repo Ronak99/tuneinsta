@@ -61,78 +61,69 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.only(
-        left: 12,
-        right: 12,
-        bottom: 12,
-      ),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 12,
-      ),
-      decoration: BoxDecoration(
-        color: Colors.black45,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          CachedImage(
+    return Row(
+      children: [
+        ClipRRect(
+          borderRadius: const BorderRadius.horizontal(
+            left: Radius.circular(12),
+          ),
+          child: CachedImage(
             widget.song.image,
-            radius: 100,
+            width: 100,
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  widget.song.title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                  overflow: TextOverflow.ellipsis,
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                widget.song.title,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  widget.song.artistName,
-                  style: const TextStyle(
-                    color: Colors.white54,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                  ),
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 4),
+              Text(
+                widget.song.artistName,
+                style: const TextStyle(
+                  color: Colors.white54,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 8),
+            ],
           ),
-          const SizedBox(width: 12),
-          GestureDetector(
-            onTap: () {
-              if (playerStateNotifier.value.playing) {
-                player.pause();
-              } else {
-                player.play();
-              }
-            },
-            child: ValueListenableBuilder(
-              valueListenable: playerStateNotifier,
-              builder: (context, state, child) {
-                return Icon(
-                  state.playing
-                      ? Icons.pause_rounded
-                      : Icons.play_arrow_rounded,
+        ),
+        const SizedBox(width: 12),
+        GestureDetector(
+          onTap: () {
+            if (playerStateNotifier.value.playing) {
+              player.pause();
+            } else {
+              player.play();
+            }
+          },
+          child: ValueListenableBuilder(
+            valueListenable: playerStateNotifier,
+            builder: (context, state, child) {
+              return Container(
+                margin: const EdgeInsets.only(right: 12),
+                child: Icon(
+                  state.playing ? Icons.pause_rounded : Icons.play_arrow_rounded,
                   color: Colors.white,
                   size: 45,
-                );
-              },
-            ),
+                ),
+              );
+            },
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

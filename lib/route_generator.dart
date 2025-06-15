@@ -2,6 +2,7 @@ import 'package:app/ui/home/master.dart';
 import 'package:app/ui/home/state/home_cubit.dart';
 import 'package:app/ui/image/master.dart';
 import 'package:app/ui/image/state/image_cubit.dart';
+import 'package:app/ui/newdock/new_dock_test_page.dart';
 import 'package:app/utils/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,8 +43,12 @@ class RouteGenerator {
           ),
         ),
         GoRoute(
+          path: Routes.DOCK_TEST.value,
+          builder: (context, state) => const NewDockTestPage(),
+        ),
+        GoRoute(
           path: Routes.VIEW_IMAGE.value,
-          builder: (context, state) =>MultiBlocProvider(
+          builder: (context, state) => MultiBlocProvider(
             providers: [
               BlocProvider.value(value: imageCubit),
             ],

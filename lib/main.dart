@@ -37,7 +37,6 @@ void main() async {
   //   }
   // }
 
-
   // init
   _initializeServices();
   await Get.find<DeviceIdentifier>().init();
@@ -49,7 +48,6 @@ void main() async {
 
   runApp(const App());
 }
-
 
 void _initializeSystemUIDefaults() {
   SystemChrome.setPreferredOrientations([

@@ -29,15 +29,14 @@ class StorageService extends GetxController {
       late StreamSubscription progressSubscription;
 
       progressSubscription = uploadTask.snapshotEvents.listen(
-            (TaskSnapshot snapshot) {
+        (TaskSnapshot snapshot) {
           if (snapshot.totalBytes > 0) {
             final progress = snapshot.bytesTransferred / snapshot.totalBytes;
             uploadProgress.value = progress;
 
             Get.find<Logger>().i(
                 "Upload progress: ${(progress * 100).toStringAsFixed(1)}% "
-                    "(${snapshot.bytesTransferred}/${snapshot.totalBytes} bytes)"
-            );
+                "(${snapshot.bytesTransferred}/${snapshot.totalBytes} bytes)");
           }
         },
         onError: (error) {
@@ -60,13 +59,11 @@ class StorageService extends GetxController {
         Get.find<Logger>().i("Upload completed successfully");
 
         return (bucket: ref.bucket, downloadUrl: downloadUrl);
-
       } catch (uploadError) {
         // Clean up subscription on error
         await progressSubscription.cancel();
         rethrow;
       }
-
     } catch (e) {
       Get.find<Logger>().e("Upload error: $e");
       throw Exception("Error while uploading: ${e.toString()}");

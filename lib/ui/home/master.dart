@@ -63,8 +63,8 @@ class HomePage extends StatelessWidget {
                 padding: const EdgeInsets.only(
                   left: 16,
                   right: 16,
-                  top: 24,
-                  bottom: 16,
+                  top: 25,
+                  bottom: 25,
                 ),
                 itemCount: state.tasks.length,
                 itemBuilder: (context, index) {

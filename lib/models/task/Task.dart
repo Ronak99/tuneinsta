@@ -32,6 +32,8 @@ class Task with _$Task {
   bool get isLocalImage => !imageUrl.startsWith('http');
   bool get isEmpty => id.isEmpty;
 
+  bool get isComplete => status != TaskStatus.initial && status == TaskStatus.complete;
+
   factory Task.fromJson(Map<String, dynamic> json) => _$TaskFromJson(json);
 
   factory Task.empty() => Task(
