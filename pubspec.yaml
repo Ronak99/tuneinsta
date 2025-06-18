@@ -50,6 +50,9 @@ dependencies:
   smooth_page_indicator: ^1.2.1
   just_audio: ^0.9.46
   lottie: ^3.2.0
+  appinio_social_share: ^0.3.2
+  http: ^1.4.0
+  path_provider: ^2.1.5
 
 dev_dependencies:
   flutter_test:

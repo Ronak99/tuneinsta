@@ -36,7 +36,7 @@ class TaskCard extends StatelessWidget {
             fit: StackFit.expand,
             children: [
               CachedImage(
-                task.imageUrl,
+                task.imageUrl!,
                 fit: BoxFit.cover,
               ),
               TaskStatusView(task: task),

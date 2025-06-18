@@ -17,8 +17,7 @@ _$TaskImpl _$$TaskImplFromJson(Map<String, dynamic> json) => _$TaskImpl(
       createdBy: json['created_by'] as String,
       createdOn: (json['created_on'] as num).toInt(),
       fileUploadPath: json['file_upload_path'] as String?,
-      imageUrl:
-          json['image_url'] as String? ?? "https://i.sstatic.net/y9DpT.jpg",
+      imageUrl: json['image_url'] as String?,
     );
 
 Map<String, dynamic> _$$TaskImplToJson(_$TaskImpl instance) =>

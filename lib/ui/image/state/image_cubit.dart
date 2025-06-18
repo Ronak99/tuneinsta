@@ -8,11 +8,19 @@ import 'package:app/services/storage_service.dart';
 import 'package:app/ui/image/state/image_state.dart';
 import 'package:app/utils/routes.dart';
 import 'package:app/utils/task_status.dart';
+import 'package:appinio_social_share/appinio_social_share.dart';
+import 'package:appinio_social_share/platforms/android.dart';
+import 'package:appinio_social_share/platforms/ios.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:go_router/go_router.dart';
+
+enum ShareType {
+  instaStory,
+  instaFeed,
+}
 
 class ImageCubit extends Cubit<ImageState> {
   // top-level stream
@@ -28,6 +36,9 @@ class ImageCubit extends Cubit<ImageState> {
     taskStream =
         Get.find<DbService>().streamTask(state.selectedTask.id).listen((task) {
       emit(state.copyWith(selectedTask: task));
+      if(task.status == TaskStatus.complete) {
+        downloadImageAndNotify();
+      }
     });
   }
 
@@ -37,20 +48,38 @@ class ImageCubit extends Cubit<ImageState> {
     emit(state.copyWith(selectedTask: Task.empty()));
 
     emit(state.copyWith(
-      selectedTask: state.selectedTask.copyWith(
-        file: file,
-        imageUrl: file.path,
-      ),
+      selectedTask: state.selectedTask.copyWith(localFilePath: file.path),
     ));
   }
 
   void onTaskTap(Task task) {
     emit(state.copyWith(selectedTask: task));
 
-    initializeStream();
-
     RouteGenerator.rootNavigatorKey.currentContext!
         .push(Routes.VIEW_IMAGE.value);
+  }
+
+  void onShareButtonTap({required ShareType shareType}) async {
+    if (state.selectedTask.downloadedFilePath == null) return;
+
+    final share = AppinioSocialShare();
+
+    final dynamic platform = Platform.isIOS ? share.iOS : share.android;
+
+    switch (shareType) {
+      case ShareType.instaStory:
+        platform.shareToInstagramStory(
+          "1767340040885933",
+          backgroundImage: state.selectedTask.downloadedFilePath,
+        );
+        break;
+      case ShareType.instaFeed:
+        share.android.shareToInstagramFeed(
+          "Some Caption",
+          state.selectedTask.downloadedFilePath,
+        );
+        break;
+    }
   }
 
   void onSelectFileButtonPressed() async {
@@ -79,30 +108,50 @@ class ImageCubit extends Cubit<ImageState> {
     }
   }
 
-  void onImageViewInit() async {
-    // can't upload if not a local image
-    if (!state.selectedTask.isLocalImage) return;
-
-    // init services
+  void downloadImageAndNotify() async {
     final storageService = Get.find<StorageService>();
-    final dbService = Get.find<DbService>();
-
-    // emit uploading process state
-    emit(
-      state.copyWith(
-        selectedTask: state.selectedTask.copyWith(status: TaskStatus.uploading),
-      ),
+    // download this image and set the downloaded value to localFilePath
+    String downloadedFilePath = await storageService.downloadImage(
+      url: state.selectedTask.imageUrl!,
+      name: state.selectedTask.fileUploadPath!.split("/").last,
     );
 
-    // upload picture
-    final file = File(state.selectedTask.imageUrl);
+    Task updatedTask =
+    state.selectedTask.copyWith(downloadedFilePath: downloadedFilePath);
 
-    final fileNameWithExt = file.uri.pathSegments.last;
-    const String folder = "uploads";
-    const String mimeType = "image/jpeg";
-    String uploadPath = "$folder/$fileNameWithExt";
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    emit(state.copyWith(selectedTask: updatedTask));
+  }
+
+  void onImageViewInit() async {
+    initializeStream();
 
     try {
+      if (state.selectedTask.localFilePath == null) {
+        return;
+      }
+
+      // init services
+      final dbService = Get.find<DbService>();
+      final storageService = Get.find<StorageService>();
+
+      // emit uploading process state
+      emit(
+        state.copyWith(
+          selectedTask:
+              state.selectedTask.copyWith(status: TaskStatus.uploading),
+        ),
+      );
+
+      // upload picture
+      final file = File(state.selectedTask.localFilePath!);
+
+      final fileNameWithExt = file.uri.pathSegments.last;
+      const String folder = "uploads";
+      const String mimeType = "image/jpeg";
+      String uploadPath = "$folder/$fileNameWithExt";
+
       UploadResponse? response = await storageService.uploadPicture(
         file: file,
         uploadPath: uploadPath,
@@ -118,13 +167,14 @@ class ImageCubit extends Cubit<ImageState> {
         createdOn: DateTime.now().millisecondsSinceEpoch,
       );
 
-      // create task within firestore
       await dbService.createTask(updatedTask);
       emit(state.copyWith(selectedTask: updatedTask));
       initializeStream();
 
       // extract songs
       await dbService.extractSongs(state.selectedTask.id);
-    } catch (e) {}
+    } catch (e) {
+      Get.find<Logger>().e("onImageViewInit: $e");
+    }
   }
 }

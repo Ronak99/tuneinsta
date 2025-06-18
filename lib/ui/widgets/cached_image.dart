@@ -39,8 +39,6 @@ class _CachedImageState extends State<CachedImage> {
         strokeWidth: 2,
       ),
       errorWidget: (context, url, error) {
-        print(error);
-
         return Container(
           height: widget.isRound ? widget.radius : widget.height,
           width: widget.isRound ? widget.radius : widget.width,

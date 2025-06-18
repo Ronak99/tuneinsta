@@ -31,9 +31,11 @@ mixin _$Task {
   @JsonKey(name: "file_upload_path")
   String? get fileUploadPath => throw _privateConstructorUsedError;
   @JsonKey(name: "image_url")
-  String get imageUrl => throw _privateConstructorUsedError;
+  String? get imageUrl => throw _privateConstructorUsedError;
   @JsonKey(includeFromJson: false, includeToJson: false)
-  File? get file => throw _privateConstructorUsedError;
+  String? get localFilePath => throw _privateConstructorUsedError;
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  String? get downloadedFilePath => throw _privateConstructorUsedError;
 
   /// Serializes this Task to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -57,8 +59,11 @@ abstract class $TaskCopyWith<$Res> {
       @JsonKey(name: "created_by") String createdBy,
       @JsonKey(name: "created_on") int createdOn,
       @JsonKey(name: "file_upload_path") String? fileUploadPath,
-      @JsonKey(name: "image_url") String imageUrl,
-      @JsonKey(includeFromJson: false, includeToJson: false) File? file});
+      @JsonKey(name: "image_url") String? imageUrl,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      String? localFilePath,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      String? downloadedFilePath});
 }
 
 /// @nodoc
@@ -83,8 +88,9 @@ class _$TaskCopyWithImpl<$Res, $Val extends Task>
     Object? createdBy = null,
     Object? createdOn = null,
     Object? fileUploadPath = freezed,
-    Object? imageUrl = null,
-    Object? file = freezed,
+    Object? imageUrl = freezed,
+    Object? localFilePath = freezed,
+    Object? downloadedFilePath = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -115,14 +121,18 @@ class _$TaskCopyWithImpl<$Res, $Val extends Task>
           ? _value.fileUploadPath
           : fileUploadPath // ignore: cast_nullable_to_non_nullable
               as String?,
-      imageUrl: null == imageUrl
+      imageUrl: freezed == imageUrl
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
-              as String,
-      file: freezed == file
-          ? _value.file
-          : file // ignore: cast_nullable_to_non_nullable
-              as File?,
+              as String?,
+      localFilePath: freezed == localFilePath
+          ? _value.localFilePath
+          : localFilePath // ignore: cast_nullable_to_non_nullable
+              as String?,
+      downloadedFilePath: freezed == downloadedFilePath
+          ? _value.downloadedFilePath
+          : downloadedFilePath // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -142,8 +152,11 @@ abstract class _$$TaskImplCopyWith<$Res> implements $TaskCopyWith<$Res> {
       @JsonKey(name: "created_by") String createdBy,
       @JsonKey(name: "created_on") int createdOn,
       @JsonKey(name: "file_upload_path") String? fileUploadPath,
-      @JsonKey(name: "image_url") String imageUrl,
-      @JsonKey(includeFromJson: false, includeToJson: false) File? file});
+      @JsonKey(name: "image_url") String? imageUrl,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      String? localFilePath,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      String? downloadedFilePath});
 }
 
 /// @nodoc
@@ -165,8 +178,9 @@ class __$$TaskImplCopyWithImpl<$Res>
     Object? createdBy = null,
     Object? createdOn = null,
     Object? fileUploadPath = freezed,
-    Object? imageUrl = null,
-    Object? file = freezed,
+    Object? imageUrl = freezed,
+    Object? localFilePath = freezed,
+    Object? downloadedFilePath = freezed,
   }) {
     return _then(_$TaskImpl(
       id: null == id
@@ -197,14 +211,18 @@ class __$$TaskImplCopyWithImpl<$Res>
           ? _value.fileUploadPath
           : fileUploadPath // ignore: cast_nullable_to_non_nullable
               as String?,
-      imageUrl: null == imageUrl
+      imageUrl: freezed == imageUrl
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
-              as String,
-      file: freezed == file
-          ? _value.file
-          : file // ignore: cast_nullable_to_non_nullable
-              as File?,
+              as String?,
+      localFilePath: freezed == localFilePath
+          ? _value.localFilePath
+          : localFilePath // ignore: cast_nullable_to_non_nullable
+              as String?,
+      downloadedFilePath: freezed == downloadedFilePath
+          ? _value.downloadedFilePath
+          : downloadedFilePath // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -220,9 +238,10 @@ class _$TaskImpl extends _Task {
       @JsonKey(name: "created_by") required this.createdBy,
       @JsonKey(name: "created_on") required this.createdOn,
       @JsonKey(name: "file_upload_path") this.fileUploadPath,
-      @JsonKey(name: "image_url")
-      this.imageUrl = "https://i.sstatic.net/y9DpT.jpg",
-      @JsonKey(includeFromJson: false, includeToJson: false) this.file})
+      @JsonKey(name: "image_url") this.imageUrl,
+      @JsonKey(includeFromJson: false, includeToJson: false) this.localFilePath,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      this.downloadedFilePath})
       : _songs = songs,
         super._();
 
@@ -255,14 +274,17 @@ class _$TaskImpl extends _Task {
   final String? fileUploadPath;
   @override
   @JsonKey(name: "image_url")
-  final String imageUrl;
+  final String? imageUrl;
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  final File? file;
+  final String? localFilePath;
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final String? downloadedFilePath;
 
   @override
   String toString() {
-    return 'Task(id: $id, status: $status, bucket: $bucket, songs: $songs, createdBy: $createdBy, createdOn: $createdOn, fileUploadPath: $fileUploadPath, imageUrl: $imageUrl, file: $file)';
+    return 'Task(id: $id, status: $status, bucket: $bucket, songs: $songs, createdBy: $createdBy, createdOn: $createdOn, fileUploadPath: $fileUploadPath, imageUrl: $imageUrl, localFilePath: $localFilePath, downloadedFilePath: $downloadedFilePath)';
   }
 
   @override
@@ -282,7 +304,10 @@ class _$TaskImpl extends _Task {
                 other.fileUploadPath == fileUploadPath) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
-            (identical(other.file, file) || other.file == file));
+            (identical(other.localFilePath, localFilePath) ||
+                other.localFilePath == localFilePath) &&
+            (identical(other.downloadedFilePath, downloadedFilePath) ||
+                other.downloadedFilePath == downloadedFilePath));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -297,7 +322,8 @@ class _$TaskImpl extends _Task {
       createdOn,
       fileUploadPath,
       imageUrl,
-      file);
+      localFilePath,
+      downloadedFilePath);
 
   /// Create a copy of Task
   /// with the given fields replaced by the non-null parameter values.
@@ -324,9 +350,11 @@ abstract class _Task extends Task {
       @JsonKey(name: "created_by") required final String createdBy,
       @JsonKey(name: "created_on") required final int createdOn,
       @JsonKey(name: "file_upload_path") final String? fileUploadPath,
-      @JsonKey(name: "image_url") final String imageUrl,
+      @JsonKey(name: "image_url") final String? imageUrl,
       @JsonKey(includeFromJson: false, includeToJson: false)
-      final File? file}) = _$TaskImpl;
+      final String? localFilePath,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      final String? downloadedFilePath}) = _$TaskImpl;
   const _Task._() : super._();
 
   factory _Task.fromJson(Map<String, dynamic> json) = _$TaskImpl.fromJson;
@@ -350,10 +378,13 @@ abstract class _Task extends Task {
   String? get fileUploadPath;
   @override
   @JsonKey(name: "image_url")
-  String get imageUrl;
+  String? get imageUrl;
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  File? get file;
+  String? get localFilePath;
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  String? get downloadedFilePath;
 
   /// Create a copy of Task
   /// with the given fields replaced by the non-null parameter values.

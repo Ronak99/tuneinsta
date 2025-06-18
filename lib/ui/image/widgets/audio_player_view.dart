@@ -53,7 +53,7 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
     player.playerStateStream.listen((state) {
       if (!playerStateNotifier.value.playing &&
           state.processingState == ProcessingState.ready) {
-        player.play();
+        // player.play();
       }
       playerStateNotifier.value = state;
     });

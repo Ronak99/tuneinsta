@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
+import 'package:http/http.dart' show get;
+import 'package:path_provider/path_provider.dart';
 
 typedef UploadResponse = ({String bucket, String downloadUrl});
 
@@ -73,5 +75,24 @@ class StorageService extends GetxController {
   // Optional: Method to cancel ongoing upload
   Future<void> cancelUpload() async {
     uploadProgress.value = 0.0;
+  }
+
+  Future<String> downloadImage({
+    required String name,
+    required String url,
+  }) async {
+    try {
+      Directory cache = await getApplicationCacheDirectory();
+      String pathname = "${cache.path}/$name";
+
+      File file = File(pathname);
+      if(!file.existsSync()){
+        var response = await get(Uri.parse(url));
+        file.writeAsBytesSync(response.bodyBytes);
+      }
+      return pathname;
+    } catch (e) {
+      rethrow;
+    }
   }
 }

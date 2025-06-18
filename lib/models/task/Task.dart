@@ -22,14 +22,13 @@ class Task with _$Task {
     @JsonKey(name: "created_on") required int createdOn,
     @JsonKey(name: "file_upload_path") String? fileUploadPath,
     @JsonKey(name: "image_url")
-    @Default("https://i.sstatic.net/y9DpT.jpg")
-    String imageUrl,
-    @JsonKey(includeFromJson: false, includeToJson: false) File? file,
+    String? imageUrl,
+    @JsonKey(includeFromJson: false, includeToJson: false) String? localFilePath,
+    @JsonKey(includeFromJson: false, includeToJson: false) String? downloadedFilePath,
   }) = _Task;
 
   const Task._();
 
-  bool get isLocalImage => !imageUrl.startsWith('http');
   bool get isEmpty => id.isEmpty;
 
   bool get isComplete => status != TaskStatus.initial && status == TaskStatus.complete;
