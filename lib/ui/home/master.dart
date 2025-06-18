@@ -3,9 +3,11 @@ import 'package:app/ui/home/state/home_cubit.dart';
 import 'package:app/ui/home/state/home_state.dart';
 import 'package:app/ui/home/widgets/task_card.dart';
 import 'package:app/ui/image/state/image_cubit.dart';
+import 'package:app/utils/routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import 'widgets/empty_state.dart';
 
@@ -26,7 +28,13 @@ class HomePage extends StatelessWidget {
         ),
         scrolledUnderElevation: 0,
         actions: [
-          BlocBuilder<HomeCubit, HomeState>(builder: (context, state) {
+      ElevatedButton(
+      onPressed: () {
+        context.push(Routes.DOCK_TEST.value);
+      },
+      child: const Text("Test"),
+      ),
+      BlocBuilder<HomeCubit, HomeState>(builder: (context, state) {
             if (state.tasks.isNotEmpty) {
               return ElevatedButton(
                 onPressed: context.read<ImageCubit>().onSelectFileButtonPressed,
