@@ -8,6 +8,10 @@ class DefaultTheme {
           color: Colors.brown.shade50,
           elevation: 0,
         ),
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: Colors.brown.shade100,
+          foregroundColor: Colors.brown.shade900,
+        ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
             overlayColor: WidgetStateProperty.resolveWith<Color?>(
