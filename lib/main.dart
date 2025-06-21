@@ -1,6 +1,7 @@
 import 'package:app/app.dart';
 import 'package:app/firebase_options.dart';
 import 'package:app/route_generator.dart';
+import 'package:app/services/share_service.dart';
 import 'package:app/services/db_service.dart';
 import 'package:app/services/device_identifier.dart';
 import 'package:app/services/storage_service.dart';
@@ -64,4 +65,5 @@ void _initializeServices() {
   Get.put(DeviceIdentifier());
   Get.put(StorageService());
   Get.put(DbService());
+  Get.put(ShareService());
 }

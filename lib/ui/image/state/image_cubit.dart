@@ -1,26 +1,20 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:app/models/share/AppShare.dart';
 import 'package:app/models/task/Task.dart';
 import 'package:app/route_generator.dart';
+import 'package:app/services/share_service.dart';
 import 'package:app/services/db_service.dart';
 import 'package:app/services/storage_service.dart';
 import 'package:app/ui/image/state/image_state.dart';
 import 'package:app/utils/routes.dart';
 import 'package:app/utils/task_status.dart';
-import 'package:appinio_social_share/appinio_social_share.dart';
-import 'package:appinio_social_share/platforms/android.dart';
-import 'package:appinio_social_share/platforms/ios.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:go_router/go_router.dart';
-
-enum ShareType {
-  instaStory,
-  instaFeed,
-}
 
 class ImageCubit extends Cubit<ImageState> {
   // top-level stream
@@ -36,7 +30,7 @@ class ImageCubit extends Cubit<ImageState> {
     taskStream =
         Get.find<DbService>().streamTask(state.selectedTask.id).listen((task) {
       emit(state.copyWith(selectedTask: task));
-      if(task.status == TaskStatus.complete) {
+      if (task.status == TaskStatus.complete) {
         downloadImageAndNotify();
       }
     });
@@ -59,27 +53,13 @@ class ImageCubit extends Cubit<ImageState> {
         .push(Routes.VIEW_IMAGE.value);
   }
 
-  void onShareButtonTap({required ShareType shareType}) async {
+  void onShareButtonTap({required AppShare appShare}) async {
     if (state.selectedTask.downloadedFilePath == null) return;
 
-    final share = AppinioSocialShare();
-
-    final dynamic platform = Platform.isIOS ? share.iOS : share.android;
-
-    switch (shareType) {
-      case ShareType.instaStory:
-        platform.shareToInstagramStory(
-          "1767340040885933",
-          backgroundImage: state.selectedTask.downloadedFilePath,
-        );
-        break;
-      case ShareType.instaFeed:
-        share.android.shareToInstagramFeed(
-          "Some Caption",
-          state.selectedTask.downloadedFilePath,
-        );
-        break;
-    }
+    Get.find<ShareService>().share(
+      appShare,
+      filePath: state.selectedTask.downloadedFilePath!,
+    );
   }
 
   void onSelectFileButtonPressed() async {
@@ -117,7 +97,7 @@ class ImageCubit extends Cubit<ImageState> {
     );
 
     Task updatedTask =
-    state.selectedTask.copyWith(downloadedFilePath: downloadedFilePath);
+        state.selectedTask.copyWith(downloadedFilePath: downloadedFilePath);
 
     await Future.delayed(const Duration(milliseconds: 500));
 
