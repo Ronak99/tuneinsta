@@ -11,13 +11,7 @@
     </queries>
 
      <!-- Internet permission -->
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false" />
     <uses-permission android:name="android.permission.INTERNET"/>
-
-    <!-- Camera permission -->
-    <uses-permission android:name="android.permission.CAMERA" />
 
     <!-- Storage permissions -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>

@@ -33,7 +33,7 @@ class ShareChipView extends StatelessWidget {
           curve: Curves.easeInOut,
           child: GestureDetector(
             onTap: () =>
-                context.read<ImageCubit>().onShareButtonTap(appShare: app),
+                context.read<ImageCubit>().onShareButtonTap(context, appShare: app),
             child: Container(
               height: height,
               margin: EdgeInsets.only(right: isLast ? 16 : 8),

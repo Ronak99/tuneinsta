@@ -1,20 +1,17 @@
+import 'package:app/services/app_preferences.dart';
 import 'package:app/utils/secure_random.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DeviceIdentifier {
-  late SharedPreferences _prefs;
   late String deviceId;
 
-  DeviceIdentifier();
-
-  init() async {
-    _prefs = await SharedPreferences.getInstance();
-
-    String? deviceId = _prefs.getString("device_id");
+  DeviceIdentifier() {
+    String? deviceId = Get.find<AppPreferences>().getDeviceId();
 
     if(deviceId == null){
       deviceId = getRecordId();
-      _prefs.setString("device_id", deviceId);
+      Get.find<AppPreferences>().setDeviceId(deviceId);
     }
 
     this.deviceId = deviceId;

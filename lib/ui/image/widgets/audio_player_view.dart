@@ -7,10 +7,12 @@ import 'package:logger/logger.dart';
 
 class AudioPlayerView extends StatefulWidget {
   final Song song;
+  final bool shouldPlay;
 
   const AudioPlayerView({
     super.key,
     required this.song,
+    required this.shouldPlay,
   });
 
   @override
@@ -18,42 +20,61 @@ class AudioPlayerView extends StatefulWidget {
 }
 
 class _AudioPlayerViewState extends State<AudioPlayerView> {
-  late AudioPlayer player;
+  AudioPlayer? player;
 
   ValueNotifier<PlayerState> playerStateNotifier = ValueNotifier<PlayerState>(
     PlayerState(false, ProcessingState.idle),
   );
 
+  bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
-
-    initPlayer();
+    if (widget.shouldPlay) {
+      // initPlayer();
+    }
   }
 
   @override
   void dispose() {
-    player.dispose();
+    player?.dispose();
     super.dispose();
   }
 
+  @override
+  void didUpdateWidget(covariant AudioPlayerView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.shouldPlay != widget.shouldPlay && widget.shouldPlay) {
+      initPlayer();
+    }
+  }
+
   void initPlayer() async {
+    if (player != null) return;
     // initializing the player
     try {
+      setState(() {
+        isLoading = true;
+      });
       player = AudioPlayer();
-      player.setVolume(1);
-      player.setLoopMode(LoopMode.all);
-      await player.setUrl(widget.song.previewUrl);
+      player!.setVolume(1);
+      player!.setLoopMode(LoopMode.all);
+      await player!.setUrl(widget.song.previewUrl);
     } catch (e) {
       // Fallback for all other errors
       Get.find<Logger>().e("Error: $e");
     }
 
     // listening for player stream
-    player.playerStateStream.listen((state) {
-      if (!playerStateNotifier.value.playing &&
+    player!.playerStateStream.listen((state) {
+      if (widget.shouldPlay &&
+          !playerStateNotifier.value.playing &&
           state.processingState == ProcessingState.ready) {
-        // player.play();
+        player!.play();
+        setState(() {
+          isLoading = false;
+        });
       }
       playerStateNotifier.value = state;
     });
@@ -101,28 +122,39 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
           ),
         ),
         const SizedBox(width: 12),
-        GestureDetector(
-          onTap: () {
-            if (playerStateNotifier.value.playing) {
-              player.pause();
-            } else {
-              player.play();
-            }
-          },
-          child: ValueListenableBuilder(
-            valueListenable: playerStateNotifier,
-            builder: (context, state, child) {
-              return Container(
-                margin: const EdgeInsets.only(right: 12),
-                child: Icon(
-                  state.playing ? Icons.pause_rounded : Icons.play_arrow_rounded,
-                  color: Colors.white,
-                  size: 45,
-                ),
-              );
+        if (isLoading)
+          Container(
+            margin: const EdgeInsets.only(right: 20),
+            child: const CircularProgressIndicator(
+              strokeWidth: 3,
+              color: Colors.white,
+            ),
+          )
+        else
+          GestureDetector(
+            onTap: () {
+              if (playerStateNotifier.value.playing) {
+                player?.pause();
+              } else {
+                player?.play();
+              }
             },
+            child: ValueListenableBuilder(
+              valueListenable: playerStateNotifier,
+              builder: (context, state, child) {
+                return Container(
+                  margin: const EdgeInsets.only(right: 12),
+                  child: Icon(
+                    state.playing
+                        ? Icons.pause_rounded
+                        : Icons.play_arrow_rounded,
+                    color: Colors.white,
+                    size: 45,
+                  ),
+                );
+              },
+            ),
           ),
-        ),
       ],
     );
   }

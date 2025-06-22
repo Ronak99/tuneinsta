@@ -1,6 +1,7 @@
 import 'package:app/app.dart';
 import 'package:app/firebase_options.dart';
 import 'package:app/route_generator.dart';
+import 'package:app/services/app_preferences.dart';
 import 'package:app/services/share_service.dart';
 import 'package:app/services/db_service.dart';
 import 'package:app/services/device_identifier.dart';
@@ -39,8 +40,7 @@ void main() async {
   // }
 
   // init
-  _initializeServices();
-  await Get.find<DeviceIdentifier>().init();
+  await _initializeServices();
 
   // init cubits
   RouteGenerator.initializeCubits();
@@ -61,7 +61,9 @@ void _initializeSystemUIDefaults() {
   );
 }
 
-void _initializeServices() {
+Future<void> _initializeServices() async {
+  AppPreferences appPreferences = await AppPreferences.getInstance();
+  Get.put(appPreferences);
   Get.put(DeviceIdentifier());
   Get.put(StorageService());
   Get.put(DbService());

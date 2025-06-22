@@ -1,7 +1,9 @@
+import 'package:app/services/app_preferences.dart';
 import 'package:app/ui/image/state/image_cubit.dart';
 import 'package:app/ui/image/state/image_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
 import 'widgets/background_view.dart';

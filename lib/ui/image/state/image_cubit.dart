@@ -4,9 +4,11 @@ import 'dart:io';
 import 'package:app/models/share/AppShare.dart';
 import 'package:app/models/task/Task.dart';
 import 'package:app/route_generator.dart';
+import 'package:app/services/app_preferences.dart';
 import 'package:app/services/share_service.dart';
 import 'package:app/services/db_service.dart';
 import 'package:app/services/storage_service.dart';
+import 'package:app/ui/image/dialog/tuneinsta_guide_dialog.dart';
 import 'package:app/ui/image/state/image_state.dart';
 import 'package:app/utils/routes.dart';
 import 'package:app/utils/task_status.dart';
@@ -53,13 +55,27 @@ class ImageCubit extends Cubit<ImageState> {
         .push(Routes.VIEW_IMAGE.value);
   }
 
-  void onShareButtonTap({required AppShare appShare}) async {
-    if (state.selectedTask.downloadedFilePath == null) return;
+  void onShareButtonTap(context, {required AppShare appShare}) async {
+    void share() {
+      if (state.selectedTask.downloadedFilePath == null) return;
 
-    Get.find<ShareService>().share(
-      appShare,
-      filePath: state.selectedTask.downloadedFilePath!,
-    );
+      Get.find<ShareService>().share(
+        appShare,
+        filePath: state.selectedTask.downloadedFilePath!,
+      );
+    }
+
+    bool shouldShow = Get.find<AppPreferences>().getShouldShowTuneinstaGuide();
+
+    if (shouldShow) {
+      bool? hasTappedOnShare = await TuneinstaGuideDialog.show(context);
+      if(hasTappedOnShare ?? false) {
+        share();
+      }
+      return;
+    }
+
+    share();
   }
 
   void onSelectFileButtonPressed() async {
