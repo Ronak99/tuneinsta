@@ -6,20 +6,21 @@ enum AppName {
   facebookStories;
 }
 
+
+final Map<String, AppName> appNameMap = {
+  "instagram_stories": AppName.instagramStories,
+  "instagram": AppName.instagram,
+  "whatsapp": AppName.whatsapp,
+  "facebook_stories": AppName.facebookStories,
+};
+
 class AppShare {
   AppName appName;
 
   AppShare({required this.appName});
 
-  static final Map<String, AppName> _appNameToEnumMap = {
-    "instagram_stories": AppName.instagramStories,
-    "instagram": AppName.instagram,
-    "whatsapp": AppName.whatsapp,
-    "facebook_stories": AppName.facebookStories,
-  };
-
   factory AppShare.fromAppName(String appNameValue) {
-    final appName = _appNameToEnumMap[appNameValue];
+    final appName = appNameMap[appNameValue];
     if (appName == null) {
       throw ArgumentError('Invalid app name: $appNameValue');
     }

@@ -19,7 +19,7 @@ class ShareService {
   init() async {
     _installedApps = await _appInioSocialShare.getInstalledApps();
     _apps = _installedApps.entries
-        .where((installStatus) => installStatus.value)
+        .where((app) => appNameMap.keys.contains(app.key) && app.value)
         .map((e) => AppShare.fromAppName(e.key))
         .toList();
   }
