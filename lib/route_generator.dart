@@ -24,6 +24,8 @@ class RouteGenerator {
     homeCubit = HomeCubit();
   }
 
+
+
   static GoRouter generateRoutes() {
     return GoRouter(
       navigatorKey: rootNavigatorKey,

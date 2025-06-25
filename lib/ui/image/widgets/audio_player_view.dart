@@ -32,7 +32,7 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
   void initState() {
     super.initState();
     if (widget.shouldPlay) {
-      // initPlayer();
+      initPlayer();
     }
   }
 

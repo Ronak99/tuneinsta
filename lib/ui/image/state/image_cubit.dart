@@ -12,6 +12,7 @@ import 'package:app/ui/image/dialog/tuneinsta_guide_dialog.dart';
 import 'package:app/ui/image/state/image_state.dart';
 import 'package:app/utils/routes.dart';
 import 'package:app/utils/task_status.dart';
+import 'package:app/utils/utils.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -69,7 +70,7 @@ class ImageCubit extends Cubit<ImageState> {
 
     if (shouldShow) {
       bool? hasTappedOnShare = await TuneinstaGuideDialog.show(context);
-      if(hasTappedOnShare ?? false) {
+      if (hasTappedOnShare ?? false) {
         share();
       }
       return;
@@ -78,11 +79,11 @@ class ImageCubit extends Cubit<ImageState> {
     share();
   }
 
-  void onSelectFileButtonPressed() async {
+  Future<void> onSelectFileButtonPressed() async {
     // when user taps upload button, even though an empty task is available
     // it means that the image is being uploaded and the record has not been created.
     if (state.selectedTask.status == TaskStatus.uploading) {
-      Get.find<Logger>().e("Image is being uploaded, please wait...");
+      Utils.showSnackbar(text: "Please wait for your last upload to complete.");
       return;
     }
 
