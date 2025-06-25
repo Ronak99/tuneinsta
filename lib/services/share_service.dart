@@ -34,14 +34,6 @@ class ShareService {
 
   Future<void> share(AppShare appShare, {required String filePath}) async {
     switch (appShare.appName) {
-      case AppName.whatsapp:
-        _share(
-          onAndroid: () => _appInioSocialShare.android.shareToWhatsapp(
-            "",
-            "",
-          ),
-          onIOS: () => _appInioSocialShare.iOS.shareToWhatsapp(""),
-        );
       case AppName.instagramStories:
         _share(
           onAndroid: () => _appInioSocialShare.android.shareToInstagramStory(
@@ -58,13 +50,6 @@ class ShareService {
           onAndroid: () =>
               _appInioSocialShare.android.shareToInstagramFeed("", filePath),
           onIOS: () => _appInioSocialShare.iOS.shareToInstagramFeed(filePath),
-        );
-      case AppName.facebookStories:
-        _share(
-          onAndroid: () => _appInioSocialShare.android
-              .shareToFacebookStory("", backgroundImage: filePath),
-          onIOS: () => _appInioSocialShare.iOS
-              .shareToFacebookStory("", backgroundImage: filePath),
         );
       default:
         print("Nothing");
