@@ -89,9 +89,9 @@ class TuneinstaGuideDialog extends StatelessWidget {
             ),
             SizedBox(
               width: double.infinity,
-              height: 200,
+              height: 160,
               child: Image.asset(
-                'assets/app_images.png',
+                'assets/instagram_icon.png',
                 fit: BoxFit.contain,
               ),
             ),
@@ -100,7 +100,7 @@ class TuneinstaGuideDialog extends StatelessWidget {
               iconColor: Colors.yellow,
               title: 'Important',
               message:
-                  'Apps like Instagram, WhatsApp, and Facebook do not allow automatic music embedding from third-party apps.',
+                  'Instagram does not allow automatic music embedding from third-party apps.',
             ),
             const SizedBox(height: 16),
             buildInfoBox(
@@ -109,7 +109,7 @@ class TuneinstaGuideDialog extends StatelessWidget {
               iconColor: Colors.lightGreen,
               title: 'What to do',
               message:
-                  'Search for the suggested song manually on your social app then add it to your story or post as usual.',
+                  'Search for the suggested song manually on Instagram then add it to your story or post as usual.',
             ),
             const SizedBox(height: 16),
             buildInfoBox(
