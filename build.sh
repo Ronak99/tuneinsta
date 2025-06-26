@@ -6,4 +6,4 @@ apksigner sign --ks upload-keystore.jks --min-sdk-version 21 --out build/app/out
 open build/app/outputs/bundle/release/
 
 # to patch
- shorebird patch --platforms=android --release-version=1.0.1+2
+shorebird patch --platforms=android --release-version=1.0.1+2
