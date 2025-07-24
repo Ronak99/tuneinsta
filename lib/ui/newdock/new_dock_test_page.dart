@@ -45,20 +45,20 @@ class _NewDockTestPageState extends State<NewDockTestPage> {
             AnimatedDockView(
               taskStatus: status,
               songs: [
-                Song(
-                  title: "Home (feat. The Gulu Widows Choir)",
-                  artistName: "Edward Sharpe & The Magnetic Zeros",
-                  image: "https://is1-ssl.mzstatic.com/image/thumb/Music/4a/b3/28/mzi.zdwkbnng.jpg/100x100bb.jpg",
-                  previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/75/67/84/756784dd-c082-0e92-4de7-81341ce7b58c/mzaf_6507255910992083821.plus.aac.p.m4a",
-                ),
-                Song(
-                  title: "Home (feat. The Gulu Widows Choir)",
-                  artistName: "Edward Sharpe & The Magnetic Zeros",
-                  image:
-                      "https://is1-ssl.mzstatic.com/image/thumb/Music/4a/b3/28/mzi.zdwkbnng.jpg/100x100bb.jpg",
-                  previewUrl:
-                      "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/75/67/84/756784dd-c082-0e92-4de7-81341ce7b58c/mzaf_6507255910992083821.plus.aac.p.m4a",
-                ),
+                // Song(
+                //   title: "Home (feat. The Gulu Widows Choir)",
+                //   artistName: "Edward Sharpe & The Magnetic Zeros",
+                //   image: "https://is1-ssl.mzstatic.com/image/thumb/Music/4a/b3/28/mzi.zdwkbnng.jpg/100x100bb.jpg",
+                //   previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/75/67/84/756784dd-c082-0e92-4de7-81341ce7b58c/mzaf_6507255910992083821.plus.aac.p.m4a",
+                // ),
+                // Song(
+                //   title: "Home (feat. The Gulu Widows Choir)",
+                //   artistName: "Edward Sharpe & The Magnetic Zeros",
+                //   image:
+                //       "https://is1-ssl.mzstatic.com/image/thumb/Music/4a/b3/28/mzi.zdwkbnng.jpg/100x100bb.jpg",
+                //   previewUrl:
+                //       "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/75/67/84/756784dd-c082-0e92-4de7-81341ce7b58c/mzaf_6507255910992083821.plus.aac.p.m4a",
+                // ),
               ],
             ),
           ],

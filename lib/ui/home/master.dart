@@ -3,6 +3,7 @@ import 'package:app/ui/home/state/home_cubit.dart';
 import 'package:app/ui/home/state/home_state.dart';
 import 'package:app/ui/home/widgets/task_card.dart';
 import 'package:app/ui/image/state/image_cubit.dart';
+import 'package:app/ui/widgets/custom_scaffold.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,10 +15,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.brown.shade50,
-      floatingActionButton:
-          BlocBuilder<HomeCubit, HomeState>(builder: (context, state) {
+    return CustomScaffold(
+      fab: BlocBuilder<HomeCubit, HomeState>(builder: (context, state) {
         if (state.tasks.isNotEmpty) {
           return FloatingActionButton(
             onPressed: context.read<ImageCubit>().onSelectFileButtonPressed,
@@ -30,25 +29,7 @@ class HomePage extends StatelessWidget {
         }
         return const SizedBox.shrink();
       }),
-      appBar: AppBar(
-        title: Text(
-          "TuneInsta",
-          style: TextStyle(
-            color: Colors.brown.shade900,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        scrolledUnderElevation: 0,
-        actions: [
-          // ElevatedButton(
-          //   onPressed: () {
-          //     context.push(Routes.DOCK_TEST.value);
-          //   },
-          //   child: const Text("Test"),
-          // ),
-          // const SizedBox(width: 12),
-        ],
-      ),
+      title: "Tuneinsta",
       body: Container(
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,

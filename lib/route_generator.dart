@@ -1,8 +1,11 @@
+import 'package:app/ui/add/master.dart';
 import 'package:app/ui/home/master.dart';
 import 'package:app/ui/home/state/home_cubit.dart';
 import 'package:app/ui/image/master.dart';
 import 'package:app/ui/image/state/image_cubit.dart';
 import 'package:app/ui/newdock/new_dock_test_page.dart';
+import 'package:app/ui/search/master.dart';
+import 'package:app/ui/search/search_cubit.dart';
 import 'package:app/utils/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,8 +26,6 @@ class RouteGenerator {
     imageCubit = ImageCubit();
     homeCubit = HomeCubit();
   }
-
-
 
   static GoRouter generateRoutes() {
     return GoRouter(
@@ -47,6 +48,19 @@ class RouteGenerator {
         GoRoute(
           path: Routes.DOCK_TEST.value,
           builder: (context, state) => const NewDockTestPage(),
+        ),
+        GoRoute(
+          path: Routes.ADD_TRACK.value,
+          builder: (context, state) => AddTrackPage(
+            addTrackPageParams: state.extra as AddTrackPageParams,
+          ),
+        ),
+        GoRoute(
+          path: Routes.SEARCH_TRACKS.value,
+          builder: (context, state) => BlocProvider(
+            create: (context) => SearchCubit(),
+            child: const SearchTrackPage(),
+          ),
         ),
         GoRoute(
           path: Routes.VIEW_IMAGE.value,

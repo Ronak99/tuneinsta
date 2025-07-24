@@ -2,6 +2,7 @@ import 'package:app/app.dart';
 import 'package:app/firebase_options.dart';
 import 'package:app/route_generator.dart';
 import 'package:app/services/app_preferences.dart';
+import 'package:app/services/search_track_service.dart';
 import 'package:app/services/share_service.dart';
 import 'package:app/services/db_service.dart';
 import 'package:app/services/device_identifier.dart';
@@ -68,4 +69,5 @@ Future<void> _initializeServices() async {
   Get.put(StorageService());
   Get.put(DbService());
   Get.put(ShareService());
+  Get.put(SearchTrackService());
 }

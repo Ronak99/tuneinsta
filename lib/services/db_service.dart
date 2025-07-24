@@ -1,3 +1,4 @@
+import 'package:app/models/song/Song.dart';
 import 'package:app/models/task/Task.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
@@ -11,6 +12,11 @@ class DbService {
       _firestore.collection('tasks').withConverter(
           fromFirestore: (data, _) => Task.fromJson(data.data()!),
           toFirestore: (task, options) => task.toJson());
+
+  CollectionReference<Song> get songCollectionReference =>
+      _firestore.collection('songs').withConverter(
+          fromFirestore: (data, _) => Song.fromJson(data.data()!),
+          toFirestore: (song, options) => song.toJson());
 
   Future<void> createTask(Task task) async {
     try {
@@ -36,12 +42,11 @@ class DbService {
     });
   }
 
-  Future<QuerySnapshot<Task>> getTasks(String deviceId) async {
-    return await taskCollectionReference
-        .where('created_by', isEqualTo: deviceId)
-        .limit(10)
-        .get();
-  }
+  Future<QuerySnapshot<Task>> getTasks(String deviceId) =>
+      taskCollectionReference
+          .where('created_by', isEqualTo: deviceId)
+          .limit(10)
+          .get();
 
   Stream<List<Task>> streamTasks(String deviceId) => taskCollectionReference
       .where('created_by', isEqualTo: deviceId)
@@ -55,4 +60,18 @@ class DbService {
       .snapshots()
       .where((snapshot) => snapshot.exists)
       .map((snapshot) => snapshot.data()!);
+
+  Stream<List<Song>> streamSongsDirectory() => songCollectionReference
+      .orderBy('added_on', descending: true)
+      .snapshots()
+      .map((snapshot) => snapshot.docs.map((e) => e.data()).toList());
+
+  Future<void> addSong(Song song) async {
+    try {
+      await songCollectionReference.doc(song.id).set(song);
+    } catch (e) {
+      Get.find<Logger>().e("Error occurred while adding song.");
+      throw Exception(e);
+    }
+  }
 }

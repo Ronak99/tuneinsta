@@ -20,12 +20,17 @@ Song _$SongFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Song {
+  String get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   @JsonKey(name: "artist_name")
   String get artistName => throw _privateConstructorUsedError;
   String get image => throw _privateConstructorUsedError;
   @JsonKey(name: "preview_url")
   String get previewUrl => throw _privateConstructorUsedError;
+  Mood get mood => throw _privateConstructorUsedError;
+  Genre get genre => throw _privateConstructorUsedError;
+  @JsonKey(name: "added_on")
+  int get addedOn => throw _privateConstructorUsedError;
 
   /// Serializes this Song to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -42,10 +47,14 @@ abstract class $SongCopyWith<$Res> {
       _$SongCopyWithImpl<$Res, Song>;
   @useResult
   $Res call(
-      {String title,
+      {String id,
+      String title,
       @JsonKey(name: "artist_name") String artistName,
       String image,
-      @JsonKey(name: "preview_url") String previewUrl});
+      @JsonKey(name: "preview_url") String previewUrl,
+      Mood mood,
+      Genre genre,
+      @JsonKey(name: "added_on") int addedOn});
 }
 
 /// @nodoc
@@ -63,12 +72,20 @@ class _$SongCopyWithImpl<$Res, $Val extends Song>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? title = null,
     Object? artistName = null,
     Object? image = null,
     Object? previewUrl = null,
+    Object? mood = null,
+    Object? genre = null,
+    Object? addedOn = null,
   }) {
     return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -85,6 +102,18 @@ class _$SongCopyWithImpl<$Res, $Val extends Song>
           ? _value.previewUrl
           : previewUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      mood: null == mood
+          ? _value.mood
+          : mood // ignore: cast_nullable_to_non_nullable
+              as Mood,
+      genre: null == genre
+          ? _value.genre
+          : genre // ignore: cast_nullable_to_non_nullable
+              as Genre,
+      addedOn: null == addedOn
+          ? _value.addedOn
+          : addedOn // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -97,10 +126,14 @@ abstract class _$$SongImplCopyWith<$Res> implements $SongCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String title,
+      {String id,
+      String title,
       @JsonKey(name: "artist_name") String artistName,
       String image,
-      @JsonKey(name: "preview_url") String previewUrl});
+      @JsonKey(name: "preview_url") String previewUrl,
+      Mood mood,
+      Genre genre,
+      @JsonKey(name: "added_on") int addedOn});
 }
 
 /// @nodoc
@@ -115,12 +148,20 @@ class __$$SongImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? title = null,
     Object? artistName = null,
     Object? image = null,
     Object? previewUrl = null,
+    Object? mood = null,
+    Object? genre = null,
+    Object? addedOn = null,
   }) {
     return _then(_$SongImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -137,6 +178,18 @@ class __$$SongImplCopyWithImpl<$Res>
           ? _value.previewUrl
           : previewUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      mood: null == mood
+          ? _value.mood
+          : mood // ignore: cast_nullable_to_non_nullable
+              as Mood,
+      genre: null == genre
+          ? _value.genre
+          : genre // ignore: cast_nullable_to_non_nullable
+              as Genre,
+      addedOn: null == addedOn
+          ? _value.addedOn
+          : addedOn // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -145,14 +198,20 @@ class __$$SongImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$SongImpl implements _Song {
   const _$SongImpl(
-      {required this.title,
+      {required this.id,
+      required this.title,
       @JsonKey(name: "artist_name") required this.artistName,
       required this.image,
-      @JsonKey(name: "preview_url") required this.previewUrl});
+      @JsonKey(name: "preview_url") required this.previewUrl,
+      required this.mood,
+      required this.genre,
+      @JsonKey(name: "added_on") required this.addedOn});
 
   factory _$SongImpl.fromJson(Map<String, dynamic> json) =>
       _$$SongImplFromJson(json);
 
+  @override
+  final String id;
   @override
   final String title;
   @override
@@ -163,10 +222,17 @@ class _$SongImpl implements _Song {
   @override
   @JsonKey(name: "preview_url")
   final String previewUrl;
+  @override
+  final Mood mood;
+  @override
+  final Genre genre;
+  @override
+  @JsonKey(name: "added_on")
+  final int addedOn;
 
   @override
   String toString() {
-    return 'Song(title: $title, artistName: $artistName, image: $image, previewUrl: $previewUrl)';
+    return 'Song(id: $id, title: $title, artistName: $artistName, image: $image, previewUrl: $previewUrl, mood: $mood, genre: $genre, addedOn: $addedOn)';
   }
 
   @override
@@ -174,18 +240,22 @@ class _$SongImpl implements _Song {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SongImpl &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.artistName, artistName) ||
                 other.artistName == artistName) &&
             (identical(other.image, image) || other.image == image) &&
             (identical(other.previewUrl, previewUrl) ||
-                other.previewUrl == previewUrl));
+                other.previewUrl == previewUrl) &&
+            (identical(other.mood, mood) || other.mood == mood) &&
+            (identical(other.genre, genre) || other.genre == genre) &&
+            (identical(other.addedOn, addedOn) || other.addedOn == addedOn));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, title, artistName, image, previewUrl);
+  int get hashCode => Object.hash(runtimeType, id, title, artistName, image,
+      previewUrl, mood, genre, addedOn);
 
   /// Create a copy of Song
   /// with the given fields replaced by the non-null parameter values.
@@ -205,14 +275,19 @@ class _$SongImpl implements _Song {
 
 abstract class _Song implements Song {
   const factory _Song(
-          {required final String title,
-          @JsonKey(name: "artist_name") required final String artistName,
-          required final String image,
-          @JsonKey(name: "preview_url") required final String previewUrl}) =
-      _$SongImpl;
+      {required final String id,
+      required final String title,
+      @JsonKey(name: "artist_name") required final String artistName,
+      required final String image,
+      @JsonKey(name: "preview_url") required final String previewUrl,
+      required final Mood mood,
+      required final Genre genre,
+      @JsonKey(name: "added_on") required final int addedOn}) = _$SongImpl;
 
   factory _Song.fromJson(Map<String, dynamic> json) = _$SongImpl.fromJson;
 
+  @override
+  String get id;
   @override
   String get title;
   @override
@@ -223,6 +298,13 @@ abstract class _Song implements Song {
   @override
   @JsonKey(name: "preview_url")
   String get previewUrl;
+  @override
+  Mood get mood;
+  @override
+  Genre get genre;
+  @override
+  @JsonKey(name: "added_on")
+  int get addedOn;
 
   /// Create a copy of Song
   /// with the given fields replaced by the non-null parameter values.

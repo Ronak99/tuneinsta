@@ -1,4 +1,3 @@
-
 enum AppName {
   instagramStories,
   instagram,
