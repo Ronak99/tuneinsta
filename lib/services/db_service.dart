@@ -74,4 +74,6 @@ class DbService {
       throw Exception(e);
     }
   }
+
+  void deleteSong(String songId) => songCollectionReference.doc(songId).delete();
 }

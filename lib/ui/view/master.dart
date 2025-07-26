@@ -1,6 +1,8 @@
+import 'package:app/models/audio_player_tile/audio_player_list_tile_props.dart';
 import 'package:app/models/song/Song.dart';
 import 'package:app/route_generator.dart';
 import 'package:app/services/db_service.dart';
+import 'package:app/ui/search/widgets/audio_player_list_tile.dart';
 import 'package:app/ui/widgets/custom_scaffold.dart';
 import 'package:app/utils/routes.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +10,10 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
 class ViewAllTracks extends StatelessWidget {
-  const ViewAllTracks({super.key});
+  final ValueNotifier<AudioPlayerListTileProps> audioPlayerNotifier =
+      ValueNotifier(AudioPlayerListTileProps());
+
+  ViewAllTracks({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -43,12 +48,15 @@ class ViewAllTracks extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 16),
                 itemBuilder: (context, index) {
                   Song song = snapshot.data![index];
-                  return ListTile(
-                    title: Text(song.title),
-                    subtitle: Text(song.artistName),
-                    leading: CircleAvatar(
-                      radius: 45,
-                      backgroundImage: NetworkImage(song.image),
+                  return AudioPlayerListTile(
+                    audioPlayerListTileProps: audioPlayerNotifier,
+                    song: song,
+                    onTap: () => {},
+                    trailing: IconButton(
+                      onPressed: () {
+                        Get.find<DbService>().deleteSong(song.id);
+                      },
+                      icon: const Icon(Icons.delete),
                     ),
                   );
                 },
