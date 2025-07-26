@@ -92,7 +92,7 @@ class _AddTrackPageState extends State<AddTrackPage> {
                 width: double.infinity,
                 initialSelection: mood,
                 dropdownMenuEntries:
-                Mood.values.map<DropdownMenuEntry<Mood>>((Mood value) {
+                    Mood.values.map<DropdownMenuEntry<Mood>>((Mood value) {
                   return DropdownMenuEntry<Mood>(
                     value: value,
                     label: value.name,
@@ -104,29 +104,48 @@ class _AddTrackPageState extends State<AddTrackPage> {
                   });
                 },
               ),
-              TextButton(
-                onPressed: () async {
-                  if (_formKey.currentState == null) return;
-                  _formKey.currentState!.save();
+              const SizedBox(height: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: GestureDetector(
+                  onTap: () async {
+                    if (_formKey.currentState == null) return;
+                    _formKey.currentState!.save();
 
-                  setState(() {
-                    isLoading = true;
-                  });
+                    setState(() {
+                      isLoading = true;
+                    });
 
-                  final song = widget.addTrackPageParams.song.copyWith(
-                    addedOn: DateTime.now().millisecondsSinceEpoch,
-                    artistName: artistName,
-                    genre: genre,
-                    mood: mood,
-                    title: title,
-                  );
+                    final song = widget.addTrackPageParams.song.copyWith(
+                      addedOn: DateTime.now().millisecondsSinceEpoch,
+                      artistName: artistName,
+                      genre: genre,
+                      mood: mood,
+                      title: title,
+                    );
 
-                  await Get.find<DbService>().addSong(song);
+                    await Get.find<DbService>().addSong(song);
 
-                  context.pop();
-                  context.pop();
-                },
-                child: const Text("Submit"),
+                    context.pop();
+                    context.pop();
+                  },
+                  child: Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.brown.shade800,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      "Add Track",
+                      style: TextStyle(
+                        color: Colors.brown.shade50,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ],
           ),

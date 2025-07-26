@@ -28,7 +28,7 @@ class DefaultTheme {
               width: 1,
             ),
           ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
         ),
         dropdownMenuTheme: DropdownMenuThemeData(
           inputDecorationTheme: InputDecorationTheme(

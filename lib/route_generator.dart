@@ -67,7 +67,7 @@ class RouteGenerator {
           path: Routes.VIEW_ALL_TRACKS.value,
           builder: (context, state) => BlocProvider(
             create: (context) => SearchCubit(),
-            child: const ViewAllTracks(),
+            child: ViewAllTracks(),
           ),
         ),
         GoRoute(

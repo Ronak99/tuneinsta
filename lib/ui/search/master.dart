@@ -1,77 +1,17 @@
+import 'package:app/models/audio_player_tile/audio_player_list_tile_props.dart';
 import 'package:app/models/song/Song.dart';
+import 'package:app/ui/add/master.dart';
 import 'package:app/ui/search/search_cubit.dart';
-import 'package:app/ui/search/widgets/search_list_item.dart';
-import 'package:app/ui/search/widgets/seekbar.dart';
+import 'package:app/ui/search/widgets/audio_player_list_tile.dart';
 import 'package:app/ui/widgets/custom_scaffold.dart';
+import 'package:app/utils/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:just_audio/just_audio.dart';
-import 'package:rxdart/rxdart.dart';
-
-class AudioPlayerCollection {
-  final AudioPlayer? audioPlayer;
-  final String? id;
-
-  PlayerState playerState = PlayerState(false, ProcessingState.idle);
-
-  AudioPlayerCollection({this.audioPlayer, this.id});
-
-  AudioPlayerCollection copyWith({AudioPlayer? audioPlayer, String? id}) {
-    return AudioPlayerCollection(
-      audioPlayer: audioPlayer,
-      id: id,
-    );
-  }
-
-  Future<AudioPlayerCollection> disposePlayer(String songId) async {
-    await audioPlayer?.pause();
-    await audioPlayer?.dispose();
-    return copyWith(audioPlayer: null, id: songId);
-  }
-
-  Stream<PositionData> get positionDataStream =>
-      Rx.combineLatest3<Duration, Duration, Duration?, PositionData>(
-          audioPlayer!.positionStream,
-          audioPlayer!.bufferedPositionStream,
-          audioPlayer!.durationStream,
-          (position, bufferedPosition, duration) => PositionData(
-              position, bufferedPosition, duration ?? Duration.zero));
-
-  Future<AudioPlayerCollection> initPlayer({
-    required String url,
-    required String songId,
-  }) async {
-    // initialize a new instance of it
-    final audioPlayer = AudioPlayer();
-    audioPlayer.setVolume(1);
-    audioPlayer.setLoopMode(LoopMode.off);
-    await audioPlayer.setUrl(url);
-
-    // retrieve a state stream
-    audioPlayer.playerStateStream.listen((state) {
-      if (!playerState.playing &&
-          state.processingState == ProcessingState.ready) {
-        audioPlayer.play();
-      }
-      playerState = state;
-    });
-
-    return copyWith(audioPlayer: audioPlayer, id: songId);
-  }
-
-  Future<void> togglePlayPause() async {
-    if (audioPlayer == null) return;
-    if (audioPlayer!.playing) {
-      await audioPlayer!.pause();
-    } else {
-      await audioPlayer!.play();
-    }
-  }
-}
+import 'package:go_router/go_router.dart';
 
 class SearchTrackPage extends StatelessWidget {
-  final ValueNotifier<AudioPlayerCollection> audioPlayerNotifier =
-      ValueNotifier(AudioPlayerCollection());
+  final ValueNotifier<AudioPlayerListTileProps> audioPlayerNotifier =
+      ValueNotifier(AudioPlayerListTileProps());
 
   SearchTrackPage({super.key});
 
@@ -109,9 +49,13 @@ class SearchTrackPage extends StatelessWidget {
             itemCount: state.results.length,
             itemBuilder: (context, index) {
               Song song = state.results[index];
-              return SearchListItem(
-                audioPlayerNotifier: audioPlayerNotifier,
+              return AudioPlayerListTile(
+                audioPlayerListTileProps: audioPlayerNotifier,
                 song: song,
+                onTap: () => context.push(
+                  Routes.ADD_TRACK.value,
+                  extra: AddTrackPageParams(song),
+                ),
               );
             },
           );

@@ -1,3 +1,4 @@
+import 'package:app/models/audio_player_tile/audio_player_list_tile_props.dart';
 import 'package:app/models/song/Song.dart';
 import 'package:app/ui/add/master.dart';
 import 'package:app/ui/search/master.dart';
@@ -7,21 +8,25 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:just_audio/just_audio.dart';
 
-class SearchListItem extends StatefulWidget {
+class AudioPlayerListTile extends StatefulWidget {
   final Song song;
-  final ValueNotifier<AudioPlayerCollection> audioPlayerNotifier;
+  final VoidCallback onTap;
+  final Widget? trailing;
+  final ValueNotifier<AudioPlayerListTileProps> audioPlayerListTileProps;
 
-  const SearchListItem({
+  const AudioPlayerListTile({
     super.key,
     required this.song,
-    required this.audioPlayerNotifier,
+    required this.onTap,
+    this.trailing,
+    required this.audioPlayerListTileProps,
   });
 
   @override
-  State<SearchListItem> createState() => _SearchListItemState();
+  State<AudioPlayerListTile> createState() => _AudioPlayerListTileState();
 }
 
-class _SearchListItemState extends State<SearchListItem> {
+class _AudioPlayerListTileState extends State<AudioPlayerListTile> {
   @override
   void dispose() {
     disposePlayer();
@@ -29,8 +34,8 @@ class _SearchListItemState extends State<SearchListItem> {
   }
 
   void disposePlayer() {
-    if (widget.audioPlayerNotifier.value.id == widget.song.id) {
-      widget.audioPlayerNotifier.value.disposePlayer(widget.song.id);
+    if (widget.audioPlayerListTileProps.value.id == widget.song.id) {
+      widget.audioPlayerListTileProps.value.disposePlayer(widget.song.id);
     }
   }
 
@@ -41,13 +46,14 @@ class _SearchListItemState extends State<SearchListItem> {
       width: double.infinity,
       child: Stack(
         children: [
-          ValueListenableBuilder<AudioPlayerCollection>(
-            valueListenable: widget.audioPlayerNotifier,
+          ValueListenableBuilder<AudioPlayerListTileProps>(
+            valueListenable: widget.audioPlayerListTileProps,
             builder: (context, audioPlayerCollection, child) {
               if (audioPlayerCollection.id == widget.song.id &&
                   audioPlayerCollection.audioPlayer != null) {
                 return StreamBuilder<PositionData>(
-                  stream: widget.audioPlayerNotifier.value.positionDataStream,
+                  stream:
+                      widget.audioPlayerListTileProps.value.positionDataStream,
                   builder: (context, snapshot) {
                     final positionData = snapshot.data;
                     return SeekBar(
@@ -55,8 +61,8 @@ class _SearchListItemState extends State<SearchListItem> {
                       position: positionData?.position ?? Duration.zero,
                       bufferedPosition:
                           positionData?.bufferedPosition ?? Duration.zero,
-                      onChangeEnd:
-                          widget.audioPlayerNotifier.value.audioPlayer!.seek,
+                      onChangeEnd: widget
+                          .audioPlayerListTileProps.value.audioPlayer!.seek,
                     );
                   },
                 );
@@ -66,22 +72,19 @@ class _SearchListItemState extends State<SearchListItem> {
           ),
           GestureDetector(
             onTap: () async {
-              widget.audioPlayerNotifier.value = await widget
-                  .audioPlayerNotifier.value
+              widget.audioPlayerListTileProps.value = await widget
+                  .audioPlayerListTileProps.value
                   .disposePlayer(widget.song.id);
 
-              context.push(
-                Routes.ADD_TRACK.value,
-                extra: AddTrackPageParams(widget.song),
-              );
+              widget.onTap();
             },
             onDoubleTap: () {
-              widget.audioPlayerNotifier.value.togglePlayPause();
+              widget.audioPlayerListTileProps.value.togglePlayPause();
             },
             onLongPress: () async {
               // dispose the player if it is already there.
-              AudioPlayerCollection audioPlayerCollection =
-                  widget.audioPlayerNotifier.value;
+              AudioPlayerListTileProps audioPlayerCollection =
+                  widget.audioPlayerListTileProps.value;
 
               if (audioPlayerCollection.audioPlayer != null) {
                 audioPlayerCollection =
@@ -95,7 +98,7 @@ class _SearchListItemState extends State<SearchListItem> {
                 );
               }
 
-              widget.audioPlayerNotifier.value = audioPlayerCollection;
+              widget.audioPlayerListTileProps.value = audioPlayerCollection;
             },
             child: Container(
               color: Colors.transparent,
@@ -126,6 +129,7 @@ class _SearchListItemState extends State<SearchListItem> {
                       ],
                     ),
                   ),
+                  widget.trailing ?? const SizedBox.shrink(),
                 ],
               ),
             ),
