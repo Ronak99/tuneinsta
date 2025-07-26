@@ -1,7 +1,7 @@
 import 'package:app/majestic/ui/grid_background/grid_background.dart';
 import 'package:app/ui/image/state/image_cubit.dart';
 import 'package:app/ui/image/state/image_state.dart';
-import 'package:app/utils/task_status.dart';
+import 'package:app/utils/enums.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

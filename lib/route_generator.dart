@@ -6,6 +6,7 @@ import 'package:app/ui/image/state/image_cubit.dart';
 import 'package:app/ui/newdock/new_dock_test_page.dart';
 import 'package:app/ui/search/master.dart';
 import 'package:app/ui/search/search_cubit.dart';
+import 'package:app/ui/view/master.dart';
 import 'package:app/utils/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -60,6 +61,13 @@ class RouteGenerator {
           builder: (context, state) => BlocProvider(
             create: (context) => SearchCubit(),
             child: const SearchTrackPage(),
+          ),
+        ),
+        GoRoute(
+          path: Routes.VIEW_ALL_TRACKS.value,
+          builder: (context, state) => BlocProvider(
+            create: (context) => SearchCubit(),
+            child: const ViewAllTracks(),
           ),
         ),
         GoRoute(

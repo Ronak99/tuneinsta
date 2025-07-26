@@ -6,6 +6,7 @@ class CustomScaffold extends StatelessWidget {
   final Widget? fab;
   final Widget body;
   final PreferredSizeWidget? bottom;
+  final List<Widget> actions;
 
   const CustomScaffold({
     super.key,
@@ -13,6 +14,7 @@ class CustomScaffold extends StatelessWidget {
     this.centerTitle = false,
     this.fab,
     this.bottom,
+    this.actions = const [],
     required this.body,
   });
 
@@ -29,6 +31,7 @@ class CustomScaffold extends StatelessWidget {
             fontWeight: FontWeight.w700,
           ),
         ),
+        actions: actions,
         bottom: bottom,
         centerTitle: centerTitle,
         scrolledUnderElevation: 0,

@@ -2,6 +2,7 @@ import 'package:app/models/song/Song.dart';
 import 'package:app/route_generator.dart';
 import 'package:app/services/db_service.dart';
 import 'package:app/ui/widgets/custom_scaffold.dart';
+import 'package:app/utils/enums.dart';
 import 'package:app/utils/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -45,6 +46,7 @@ class _AddTrackPageState extends State<AddTrackPage> {
     return CustomScaffold(
       title: "Add Track",
       body: Form(
+        key: _formKey,
         child: Column(
           children: [
             TextFormField(

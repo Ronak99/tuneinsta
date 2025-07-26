@@ -148,7 +148,6 @@ class SearchTrackService {
         'term': query.trim(),
         'media': 'music',
         'entity': 'song',
-        'limit': limit.toString(),
       });
 
       developer.log('Searching iTunes for tracks with query: $query');

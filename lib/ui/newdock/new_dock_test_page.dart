@@ -1,7 +1,7 @@
 import 'package:app/models/song/Song.dart';
 import 'package:app/ui/home/widgets/card_action_button.dart';
 import 'package:app/ui/image/widgets/dock/animated_dock_view.dart';
-import 'package:app/utils/task_status.dart';
+import 'package:app/utils/enums.dart';
 import 'package:flutter/material.dart';
 
 class NewDockTestPage extends StatefulWidget {

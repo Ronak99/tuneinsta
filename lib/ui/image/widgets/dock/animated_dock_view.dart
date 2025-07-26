@@ -1,7 +1,7 @@
 import 'package:app/models/song/Song.dart';
 import 'package:app/ui/image/widgets/songs_view.dart';
 import 'package:app/ui/widgets/cached_image.dart';
-import 'package:app/utils/task_status.dart';
+import 'package:app/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 

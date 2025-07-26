@@ -1,4 +1,4 @@
-import 'package:app/utils/task_status.dart';
+import 'package:app/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 

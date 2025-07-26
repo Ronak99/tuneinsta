@@ -1,32 +1,10 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../utils/enums.dart';
+
 part 'Song.freezed.dart';
 
 part 'Song.g.dart';
-
-enum Mood {
-  happy,
-  sad,
-  excited,
-  relaxed,
-  nostalgic,
-  adventurous,
-  romantic,
-  angry,
-  surprised,
-  peaceful,
-}
-
-enum Genre {
-  pop,
-  rock,
-  hiphop,
-  jazz,
-  classical,
-  electronic,
-  country,
-  reggae,
-}
 
 @freezed
 class Song with _$Song {

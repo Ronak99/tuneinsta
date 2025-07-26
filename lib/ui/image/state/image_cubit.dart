@@ -11,7 +11,7 @@ import 'package:app/services/storage_service.dart';
 import 'package:app/ui/image/dialog/tuneinsta_guide_dialog.dart';
 import 'package:app/ui/image/state/image_state.dart';
 import 'package:app/utils/routes.dart';
-import 'package:app/utils/task_status.dart';
+import 'package:app/utils/enums.dart';
 import 'package:app/utils/utils.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

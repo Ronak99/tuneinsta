@@ -4,9 +4,11 @@ import 'package:app/ui/home/state/home_state.dart';
 import 'package:app/ui/home/widgets/task_card.dart';
 import 'package:app/ui/image/state/image_cubit.dart';
 import 'package:app/ui/widgets/custom_scaffold.dart';
+import 'package:app/utils/routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import 'widgets/empty_state.dart';
 
@@ -29,6 +31,12 @@ class HomePage extends StatelessWidget {
         }
         return const SizedBox.shrink();
       }),
+      actions: [
+        TextButton(
+          onPressed: () => context.push(Routes.VIEW_ALL_TRACKS.value),
+          child: const Text("View"),
+        ),
+      ],
       title: "Tuneinsta",
       body: Container(
         decoration: BoxDecoration(

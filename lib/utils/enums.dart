@@ -1,4 +1,29 @@
 
+enum Mood {
+  happy,
+  sad,
+  excited,
+  relaxed,
+  nostalgic,
+  adventurous,
+  romantic,
+  angry,
+  surprised,
+  peaceful,
+}
+
+enum Genre {
+  pop,
+  rock,
+  hiphop,
+  jazz,
+  classical,
+  electronic,
+  country,
+  reggae,
+}
+
+
 enum TaskStatus {
   // default state for initializing
   initial,

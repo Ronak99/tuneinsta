@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:app/models/song/Song.dart';
 import 'package:app/services/device_identifier.dart';
 import 'package:app/utils/secure_random.dart';
-import 'package:app/utils/task_status.dart';
+import 'package:app/utils/enums.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get/get.dart';
 
