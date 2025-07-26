@@ -10,11 +10,13 @@ import 'package:go_router/go_router.dart';
 
 class AddTrackPageParams {
   final Song song;
+
   AddTrackPageParams(this.song);
 }
 
 class AddTrackPage extends StatefulWidget {
   final AddTrackPageParams addTrackPageParams;
+
   const AddTrackPage({super.key, required this.addTrackPageParams});
 
   @override
@@ -45,103 +47,89 @@ class _AddTrackPageState extends State<AddTrackPage> {
   Widget build(BuildContext context) {
     return CustomScaffold(
       title: "Add Track",
-      body: Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            TextFormField(
-              initialValue: title,
-              onSaved: (value) {
-                title = value!;
-              },
-              decoration: const InputDecoration(
-                hintText: "Track Name",
+      body: Padding(
+        padding: const EdgeInsets.only(top: 12.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              TextFormField(
+                initialValue: title,
+                onSaved: (value) {
+                  title = value!;
+                },
+                decoration: const InputDecoration(
+                  hintText: "Track Name",
+                ),
               ),
-            ),
-            TextFormField(
-              initialValue: artistName,
-              onSaved: (value) {
-                artistName = value!;
-              },
-              decoration: const InputDecoration(
-                hintText: "Artist Name",
+              TextFormField(
+                initialValue: artistName,
+                onSaved: (value) {
+                  artistName = value!;
+                },
+                decoration: const InputDecoration(
+                  hintText: "Artist Name",
+                ),
               ),
-            ),
-
-            DropdownButton<Genre>(
-              value: genre,
-              icon: const Icon(Icons.arrow_downward),
-              iconSize: 24,
-              elevation: 16,
-              style: TextStyle(color: Colors.blue),
-              underline: Container(
-                height: 2,
-                color: Colors.blueAccent,
+              DropdownMenu<Genre>(
+                width: MediaQuery.of(context).size.width,
+                initialSelection: genre,
+                dropdownMenuEntries:
+                    Genre.values.map<DropdownMenuEntry<Genre>>((Genre value) {
+                  return DropdownMenuEntry<Genre>(
+                    value: value,
+                    label: value.name,
+                    // child: Text(value.toString().split('.').last.toUpperCase()),
+                  );
+                }).toList(),
+                onSelected: (Genre? selectedGenre) {
+                  setState(() {
+                    genre = selectedGenre!;
+                  });
+                },
               ),
-              onChanged: (Genre? newValue) {
-                setState(() {
-                  genre = newValue!;
-                });
-              },
-
-              items: Genre.values.map<DropdownMenuItem<Genre>>((Genre value) {
-                return DropdownMenuItem<Genre>(
-                  value: value,
-                  child: Text(value.toString().split('.').last.toUpperCase()),
-                );
-              }).toList(),
-            ),
-
-            DropdownButton<Mood>(
-              value: mood,
-              icon: const Icon(Icons.arrow_downward),
-              iconSize: 24,
-              elevation: 16,
-              style: TextStyle(color: Colors.blue),
-              underline: Container(
-                height: 2,
-                color: Colors.blueAccent,
+              DropdownMenu<Mood>(
+                width: double.infinity,
+                initialSelection: mood,
+                dropdownMenuEntries:
+                Mood.values.map<DropdownMenuEntry<Mood>>((Mood value) {
+                  return DropdownMenuEntry<Mood>(
+                    value: value,
+                    label: value.name,
+                  );
+                }).toList(),
+                onSelected: (Mood? selectedMood) {
+                  setState(() {
+                    mood = selectedMood!;
+                  });
+                },
               ),
-              onChanged: (Mood? newValue) {
-                setState(() {
-                  mood = newValue!;
-                });
-              },
+              TextButton(
+                onPressed: () async {
+                  if (_formKey.currentState == null) return;
+                  _formKey.currentState!.save();
 
-              items: Mood.values.map<DropdownMenuItem<Mood>>((Mood value) {
-                return DropdownMenuItem<Mood>(
-                  value: value,
-                  child: Text(value.toString().split('.').last.toUpperCase()),
-                );
-              }).toList(),
-            ),
+                  setState(() {
+                    isLoading = true;
+                  });
 
-            TextButton(
-              onPressed: () async {
-                if(_formKey.currentState == null) return;
-                _formKey.currentState!.save();
+                  final song = widget.addTrackPageParams.song.copyWith(
+                    addedOn: DateTime.now().millisecondsSinceEpoch,
+                    artistName: artistName,
+                    genre: genre,
+                    mood: mood,
+                    title: title,
+                  );
 
-                setState(() {
-                  isLoading = true;
-                });
+                  await Get.find<DbService>().addSong(song);
 
-                final song = widget.addTrackPageParams.song.copyWith(
-                  addedOn: DateTime.now().millisecondsSinceEpoch,
-                  artistName: artistName,
-                  genre: genre,
-                  mood: mood,
-                  title: title,
-                );
-
-                await Get.find<DbService>().addSong(song);
-
-                context.pop();
-                context.pop();
-
-              },
-              child: const Text("Submit"),
-            ),
-          ],
+                  context.pop();
+                  context.pop();
+                },
+                child: const Text("Submit"),
+              ),
+            ],
+          ),
         ),
       ),
     );

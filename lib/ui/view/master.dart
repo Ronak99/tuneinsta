@@ -40,6 +40,7 @@ class ViewAllTracks extends StatelessWidget {
               return ListView.separated(
                 separatorBuilder: (context, index) => const Divider(),
                 itemCount: snapshot.data!.length,
+                padding: const EdgeInsets.only(top: 16),
                 itemBuilder: (context, index) {
                   Song song = snapshot.data![index];
                   return ListTile(

@@ -60,7 +60,7 @@ class RouteGenerator {
           path: Routes.SEARCH_TRACKS.value,
           builder: (context, state) => BlocProvider(
             create: (context) => SearchCubit(),
-            child: const SearchTrackPage(),
+            child: SearchTrackPage(),
           ),
         ),
         GoRoute(

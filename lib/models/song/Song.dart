@@ -18,6 +18,5 @@ class Song with _$Song {
     required Genre genre,
     @JsonKey(name: "added_on") required int addedOn,
   }) = _Song;
-
   factory Song.fromJson(Map<String, dynamic> json) => _$SongFromJson(json);
 }
