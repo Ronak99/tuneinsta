@@ -7,6 +7,7 @@ class CustomScaffold extends StatelessWidget {
   final Widget body;
   final PreferredSizeWidget? bottom;
   final List<Widget> actions;
+  final VoidCallback? onTitleTap;
 
   const CustomScaffold({
     super.key,
@@ -16,6 +17,7 @@ class CustomScaffold extends StatelessWidget {
     this.bottom,
     this.actions = const [],
     required this.body,
+    this.onTitleTap,
   });
 
   @override
@@ -24,11 +26,14 @@ class CustomScaffold extends StatelessWidget {
       backgroundColor: Colors.brown.shade50,
       floatingActionButton: fab,
       appBar: AppBar(
-        title: Text(
-          title,
-          style: TextStyle(
-            color: Colors.brown.shade900,
-            fontWeight: FontWeight.w700,
+        title: GestureDetector(
+          onTap: onTitleTap,
+          child: Text(
+            title,
+            style: TextStyle(
+              color: Colors.brown.shade900,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
         actions: actions,

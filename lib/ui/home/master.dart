@@ -1,13 +1,17 @@
 import 'package:app/models/task/Task.dart';
+import 'package:app/services/db_service.dart';
 import 'package:app/ui/home/state/home_cubit.dart';
 import 'package:app/ui/home/state/home_state.dart';
 import 'package:app/ui/home/widgets/task_card.dart';
 import 'package:app/ui/image/state/image_cubit.dart';
 import 'package:app/ui/widgets/custom_scaffold.dart';
 import 'package:app/utils/routes.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
 import 'widgets/empty_state.dart';
@@ -17,6 +21,9 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int _count = 0;
+    ValueNotifier<bool> showPasswordField = ValueNotifier<bool>(false);
+
     return CustomScaffold(
       fab: BlocBuilder<HomeCubit, HomeState>(builder: (context, state) {
         if (state.tasks.isNotEmpty) {
@@ -32,12 +39,49 @@ class HomePage extends StatelessWidget {
         return const SizedBox.shrink();
       }),
       actions: [
-        TextButton(
-          onPressed: () => context.push(Routes.VIEW_ALL_TRACKS.value),
-          child: const Text("View"),
-        ),
+        if (kDebugMode)
+          TextButton(
+            onPressed: () => context.push(Routes.VIEW_ALL_TRACKS.value),
+            child: const Text("View"),
+          ),
+        ValueListenableBuilder<bool>(
+            valueListenable: showPasswordField,
+            builder: (context, state, child) {
+              if (state) {
+                return child!;
+              }
+              return const SizedBox.shrink();
+            },
+            child: Expanded(
+              child: TextField(
+                decoration: const InputDecoration(hintText: 'Password'),
+                onSubmitted: (value) {
+                  if (value == Get.find<DbService>().password) {
+                    context.push(Routes.VIEW_ALL_TRACKS.value);
+                    showPasswordField.value = false;
+                  }
+                },
+              ),
+            ),
+          ),
       ],
       title: "Tuneinsta",
+      onTitleTap: () {
+        _count++;
+
+        EasyDebounce.debounce('tag', const Duration(seconds: 1), () {
+          _count = 0;
+        });
+
+        if (_count >= 5) {
+          _count = 0;
+          showPasswordField.value = true;
+
+          EasyDebounce.debounce('tag', const Duration(seconds: 10), () {
+            showPasswordField.value = false;
+          });
+        }
+      },
       body: Container(
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,

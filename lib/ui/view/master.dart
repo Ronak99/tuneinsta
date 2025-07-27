@@ -51,7 +51,6 @@ class ViewAllTracks extends StatelessWidget {
                   return AudioPlayerListTile(
                     audioPlayerListTileProps: audioPlayerNotifier,
                     song: song,
-                    onTap: () => {},
                     trailing: IconButton(
                       onPressed: () {
                         Get.find<DbService>().deleteSong(song.id);

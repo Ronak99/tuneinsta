@@ -10,14 +10,12 @@ import 'package:just_audio/just_audio.dart';
 
 class AudioPlayerListTile extends StatefulWidget {
   final Song song;
-  final VoidCallback onTap;
   final Widget? trailing;
   final ValueNotifier<AudioPlayerListTileProps> audioPlayerListTileProps;
 
   const AudioPlayerListTile({
     super.key,
     required this.song,
-    required this.onTap,
     this.trailing,
     required this.audioPlayerListTileProps,
   });
@@ -41,7 +39,7 @@ class _AudioPlayerListTileState extends State<AudioPlayerListTile> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 75,
       width: double.infinity,
       child: Stack(
@@ -76,7 +74,10 @@ class _AudioPlayerListTileState extends State<AudioPlayerListTile> {
                   .audioPlayerListTileProps.value
                   .disposePlayer(widget.song.id);
 
-              widget.onTap();
+              context.push(
+                Routes.ADD_TRACK.value,
+                extra: AddTrackPageParams(widget.song),
+              );
             },
             onDoubleTap: () {
               widget.audioPlayerListTileProps.value.togglePlayPause();
@@ -102,7 +103,7 @@ class _AudioPlayerListTileState extends State<AudioPlayerListTile> {
             },
             child: Container(
               color: Colors.transparent,
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Row(
                 children: [
                   CircleAvatar(
@@ -121,11 +122,11 @@ class _AudioPlayerListTileState extends State<AudioPlayerListTile> {
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
-                        Text(
-                          widget.song.artistName,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                         Text(
+                            widget.song.artistName,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                       ],
                     ),
                   ),

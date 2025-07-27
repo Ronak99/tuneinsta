@@ -108,7 +108,7 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 2),
               Text(
                 widget.song.artistName,
                 style: const TextStyle(
@@ -116,6 +116,8 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
                   fontSize: 12,
                   fontWeight: FontWeight.w400,
                 ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 8),
             ],

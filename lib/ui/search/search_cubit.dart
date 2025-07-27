@@ -32,8 +32,8 @@ class SearchCubit extends Cubit<SearchState> {
               artistName: track.artistName,
               image: track.artworkUrl100,
               previewUrl: track.previewUrl,
-              genre: Genre.classical,
-              mood: Mood.adventurous,
+              genre: [Genre.classical],
+              mood: [Mood.adventurous],
               addedOn: DateTime.now().millisecondsSinceEpoch,
             ),
           )

@@ -27,8 +27,8 @@ mixin _$Song {
   String get image => throw _privateConstructorUsedError;
   @JsonKey(name: "preview_url")
   String get previewUrl => throw _privateConstructorUsedError;
-  Mood get mood => throw _privateConstructorUsedError;
-  Genre get genre => throw _privateConstructorUsedError;
+  List<Mood> get mood => throw _privateConstructorUsedError;
+  List<Genre> get genre => throw _privateConstructorUsedError;
   @JsonKey(name: "added_on")
   int get addedOn => throw _privateConstructorUsedError;
 
@@ -52,8 +52,8 @@ abstract class $SongCopyWith<$Res> {
       @JsonKey(name: "artist_name") String artistName,
       String image,
       @JsonKey(name: "preview_url") String previewUrl,
-      Mood mood,
-      Genre genre,
+      List<Mood> mood,
+      List<Genre> genre,
       @JsonKey(name: "added_on") int addedOn});
 }
 
@@ -105,11 +105,11 @@ class _$SongCopyWithImpl<$Res, $Val extends Song>
       mood: null == mood
           ? _value.mood
           : mood // ignore: cast_nullable_to_non_nullable
-              as Mood,
+              as List<Mood>,
       genre: null == genre
           ? _value.genre
           : genre // ignore: cast_nullable_to_non_nullable
-              as Genre,
+              as List<Genre>,
       addedOn: null == addedOn
           ? _value.addedOn
           : addedOn // ignore: cast_nullable_to_non_nullable
@@ -131,8 +131,8 @@ abstract class _$$SongImplCopyWith<$Res> implements $SongCopyWith<$Res> {
       @JsonKey(name: "artist_name") String artistName,
       String image,
       @JsonKey(name: "preview_url") String previewUrl,
-      Mood mood,
-      Genre genre,
+      List<Mood> mood,
+      List<Genre> genre,
       @JsonKey(name: "added_on") int addedOn});
 }
 
@@ -179,13 +179,13 @@ class __$$SongImplCopyWithImpl<$Res>
           : previewUrl // ignore: cast_nullable_to_non_nullable
               as String,
       mood: null == mood
-          ? _value.mood
+          ? _value._mood
           : mood // ignore: cast_nullable_to_non_nullable
-              as Mood,
+              as List<Mood>,
       genre: null == genre
-          ? _value.genre
+          ? _value._genre
           : genre // ignore: cast_nullable_to_non_nullable
-              as Genre,
+              as List<Genre>,
       addedOn: null == addedOn
           ? _value.addedOn
           : addedOn // ignore: cast_nullable_to_non_nullable
@@ -203,9 +203,11 @@ class _$SongImpl implements _Song {
       @JsonKey(name: "artist_name") required this.artistName,
       required this.image,
       @JsonKey(name: "preview_url") required this.previewUrl,
-      required this.mood,
-      required this.genre,
-      @JsonKey(name: "added_on") required this.addedOn});
+      required final List<Mood> mood,
+      required final List<Genre> genre,
+      @JsonKey(name: "added_on") required this.addedOn})
+      : _mood = mood,
+        _genre = genre;
 
   factory _$SongImpl.fromJson(Map<String, dynamic> json) =>
       _$$SongImplFromJson(json);
@@ -222,10 +224,22 @@ class _$SongImpl implements _Song {
   @override
   @JsonKey(name: "preview_url")
   final String previewUrl;
+  final List<Mood> _mood;
   @override
-  final Mood mood;
+  List<Mood> get mood {
+    if (_mood is EqualUnmodifiableListView) return _mood;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_mood);
+  }
+
+  final List<Genre> _genre;
   @override
-  final Genre genre;
+  List<Genre> get genre {
+    if (_genre is EqualUnmodifiableListView) return _genre;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_genre);
+  }
+
   @override
   @JsonKey(name: "added_on")
   final int addedOn;
@@ -247,15 +261,23 @@ class _$SongImpl implements _Song {
             (identical(other.image, image) || other.image == image) &&
             (identical(other.previewUrl, previewUrl) ||
                 other.previewUrl == previewUrl) &&
-            (identical(other.mood, mood) || other.mood == mood) &&
-            (identical(other.genre, genre) || other.genre == genre) &&
+            const DeepCollectionEquality().equals(other._mood, _mood) &&
+            const DeepCollectionEquality().equals(other._genre, _genre) &&
             (identical(other.addedOn, addedOn) || other.addedOn == addedOn));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, title, artistName, image,
-      previewUrl, mood, genre, addedOn);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      title,
+      artistName,
+      image,
+      previewUrl,
+      const DeepCollectionEquality().hash(_mood),
+      const DeepCollectionEquality().hash(_genre),
+      addedOn);
 
   /// Create a copy of Song
   /// with the given fields replaced by the non-null parameter values.
@@ -280,8 +302,8 @@ abstract class _Song implements Song {
       @JsonKey(name: "artist_name") required final String artistName,
       required final String image,
       @JsonKey(name: "preview_url") required final String previewUrl,
-      required final Mood mood,
-      required final Genre genre,
+      required final List<Mood> mood,
+      required final List<Genre> genre,
       @JsonKey(name: "added_on") required final int addedOn}) = _$SongImpl;
 
   factory _Song.fromJson(Map<String, dynamic> json) = _$SongImpl.fromJson;
@@ -299,9 +321,9 @@ abstract class _Song implements Song {
   @JsonKey(name: "preview_url")
   String get previewUrl;
   @override
-  Mood get mood;
+  List<Mood> get mood;
   @override
-  Genre get genre;
+  List<Genre> get genre;
   @override
   @JsonKey(name: "added_on")
   int get addedOn;

@@ -8,6 +8,19 @@ import 'package:logger/logger.dart';
 class DbService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  String? _password;
+
+  String? get password => _password;
+
+  DbService() {
+    _iniializeAdminPassword();
+  }
+
+  void _iniializeAdminPassword() async {
+    _password =
+        (await _firestore.doc('admin_config/password').get()).get("password");
+  }
+
   CollectionReference<Task> get taskCollectionReference =>
       _firestore.collection('tasks').withConverter(
           fromFirestore: (data, _) => Task.fromJson(data.data()!),
@@ -68,12 +81,17 @@ class DbService {
 
   Future<void> addSong(Song song) async {
     try {
-      await songCollectionReference.doc(song.id).set(song);
+      _firestore.collection('backup_songs').doc(song.id).set(song.toJson(), SetOptions(merge: true),);
+      await songCollectionReference.doc(song.id).set(
+            song,
+            SetOptions(merge: true),
+          );
     } catch (e) {
       Get.find<Logger>().e("Error occurred while adding song.");
       throw Exception(e);
     }
   }
 
-  void deleteSong(String songId) => songCollectionReference.doc(songId).delete();
+  void deleteSong(String songId) =>
+      songCollectionReference.doc(songId).delete();
 }

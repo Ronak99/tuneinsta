@@ -1,6 +1,7 @@
 import 'package:app/models/song/Song.dart';
 import 'package:app/route_generator.dart';
 import 'package:app/services/db_service.dart';
+import 'package:app/ui/add/widgets/custom_selector.dart';
 import 'package:app/ui/widgets/custom_scaffold.dart';
 import 'package:app/utils/enums.dart';
 import 'package:app/utils/routes.dart';
@@ -24,8 +25,12 @@ class AddTrackPage extends StatefulWidget {
 }
 
 class _AddTrackPageState extends State<AddTrackPage> {
-  late Mood mood;
-  late Genre genre;
+  late List<Mood> moodList;
+  late List<Genre> genreList;
+
+  late Mood selectedMood;
+  late Genre selectedGenre;
+
   late String title;
   late String artistName;
 
@@ -37,8 +42,12 @@ class _AddTrackPageState extends State<AddTrackPage> {
   void initState() {
     super.initState();
 
-    mood = widget.addTrackPageParams.song.mood;
-    genre = widget.addTrackPageParams.song.genre;
+    moodList = List.from(widget.addTrackPageParams.song.mood);
+    selectedMood = widget.addTrackPageParams.song.mood.first;
+
+    genreList = List.from(widget.addTrackPageParams.song.genre);
+    selectedGenre = widget.addTrackPageParams.song.genre.first;
+
     title = widget.addTrackPageParams.song.title;
     artistName = widget.addTrackPageParams.song.artistName;
   }
@@ -71,38 +80,37 @@ class _AddTrackPageState extends State<AddTrackPage> {
                   hintText: "Artist Name",
                 ),
               ),
-              DropdownMenu<Genre>(
-                width: MediaQuery.of(context).size.width,
-                initialSelection: genre,
-                dropdownMenuEntries:
-                    Genre.values.map<DropdownMenuEntry<Genre>>((Genre value) {
-                  return DropdownMenuEntry<Genre>(
-                    value: value,
-                    label: value.name,
-                    // child: Text(value.toString().split('.').last.toUpperCase()),
-                  );
-                }).toList(),
-                onSelected: (Genre? selectedGenre) {
+              CustomSelector<Genre>(
+                allItems: Genre.values,
+                label: 'GENRE',
+                onAdd: (genre)  {
                   setState(() {
-                    genre = selectedGenre!;
+                    genreList.add(genre);
                   });
                 },
+                onRemove: (genre) {
+                  setState(() {
+                    genreList.remove(genre);
+                  });
+                },
+                selectedItems: genreList,
+                getLabel: (genre) => genre.name,
               ),
-              DropdownMenu<Mood>(
-                width: double.infinity,
-                initialSelection: mood,
-                dropdownMenuEntries:
-                    Mood.values.map<DropdownMenuEntry<Mood>>((Mood value) {
-                  return DropdownMenuEntry<Mood>(
-                    value: value,
-                    label: value.name,
-                  );
-                }).toList(),
-                onSelected: (Mood? selectedMood) {
+              CustomSelector<Mood>(
+                allItems: Mood.values,
+                selectedItems: moodList,
+                label: 'MOOD',
+                onAdd: (mood)  {
                   setState(() {
-                    mood = selectedMood!;
+                    moodList.add(mood);
                   });
                 },
+                onRemove: (mood) {
+                  setState(() {
+                    moodList.remove(mood);
+                  });
+                },
+                getLabel: (mood) => mood.name,
               ),
               const SizedBox(height: 16),
               Padding(
@@ -119,8 +127,8 @@ class _AddTrackPageState extends State<AddTrackPage> {
                     final song = widget.addTrackPageParams.song.copyWith(
                       addedOn: DateTime.now().millisecondsSinceEpoch,
                       artistName: artistName,
-                      genre: genre,
-                      mood: mood,
+                      genre: genreList,
+                      mood: moodList,
                       title: title,
                     );
 

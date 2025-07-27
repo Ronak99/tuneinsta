@@ -52,10 +52,7 @@ class SearchTrackPage extends StatelessWidget {
               return AudioPlayerListTile(
                 audioPlayerListTileProps: audioPlayerNotifier,
                 song: song,
-                onTap: () => context.push(
-                  Routes.ADD_TRACK.value,
-                  extra: AddTrackPageParams(song),
-                ),
+
               );
             },
           );

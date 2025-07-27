@@ -12,8 +12,12 @@ _$SongImpl _$$SongImplFromJson(Map<String, dynamic> json) => _$SongImpl(
       artistName: json['artist_name'] as String,
       image: json['image'] as String,
       previewUrl: json['preview_url'] as String,
-      mood: $enumDecode(_$MoodEnumMap, json['mood']),
-      genre: $enumDecode(_$GenreEnumMap, json['genre']),
+      mood: (json['mood'] as List<dynamic>)
+          .map((e) => $enumDecode(_$MoodEnumMap, e))
+          .toList(),
+      genre: (json['genre'] as List<dynamic>)
+          .map((e) => $enumDecode(_$GenreEnumMap, e))
+          .toList(),
       addedOn: (json['added_on'] as num).toInt(),
     );
 
@@ -24,8 +28,8 @@ Map<String, dynamic> _$$SongImplToJson(_$SongImpl instance) =>
       'artist_name': instance.artistName,
       'image': instance.image,
       'preview_url': instance.previewUrl,
-      'mood': _$MoodEnumMap[instance.mood]!,
-      'genre': _$GenreEnumMap[instance.genre]!,
+      'mood': instance.mood.map((e) => _$MoodEnumMap[e]!).toList(),
+      'genre': instance.genre.map((e) => _$GenreEnumMap[e]!).toList(),
       'added_on': instance.addedOn,
     };
 
