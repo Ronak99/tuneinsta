@@ -16,3 +16,7 @@ subprojects {
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
+
+configurations.all {
+    exclude group: "com.google.android.gms", module: "play-services-ads-identifier"
+}
