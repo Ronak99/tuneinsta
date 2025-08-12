@@ -28,7 +28,8 @@ class DefaultTheme {
               width: 1,
             ),
           ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
         ),
         dropdownMenuTheme: DropdownMenuThemeData(
           inputDecorationTheme: InputDecorationTheme(
@@ -63,6 +64,30 @@ class DefaultTheme {
           cursorColor: Colors.brown.shade900,
           selectionColor: Colors.brown.shade200,
         ),
+        textButtonTheme: TextButtonThemeData(
+          style: ButtonStyle(
+            overlayColor: WidgetStateProperty.resolveWith<Color?>(
+                (Set<WidgetState> states) {
+              if (states.contains(WidgetState.pressed)) {
+                return Colors
+                    .brown.shade200; // Change this to your desired ink color
+              }
+              return null; // Use default color otherwise
+            }),
+            elevation: const WidgetStatePropertyAll<double>(0),
+            backgroundColor:
+                const WidgetStatePropertyAll<Color>(Colors.transparent),
+            foregroundColor:
+                WidgetStatePropertyAll<Color>(Colors.brown.shade800),
+            textStyle: WidgetStatePropertyAll<TextStyle>(
+              TextStyle(
+                fontWeight: FontWeight.w700,
+                color: Colors.brown.shade800,
+                fontFamily: 'SFUIText',
+              ),
+            ),
+          ),
+        ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
             overlayColor: WidgetStateProperty.resolveWith<Color?>(
@@ -75,13 +100,13 @@ class DefaultTheme {
             }),
             elevation: const WidgetStatePropertyAll<double>(0),
             backgroundColor:
-                WidgetStatePropertyAll<Color>(Colors.brown.shade100),
-            foregroundColor:
                 WidgetStatePropertyAll<Color>(Colors.brown.shade800),
+            foregroundColor:
+                WidgetStatePropertyAll<Color>(Colors.brown.shade100),
             textStyle: WidgetStatePropertyAll<TextStyle>(
               TextStyle(
                 fontWeight: FontWeight.w700,
-                color: Colors.brown.shade800,
+                color: Colors.brown.shade100,
                 fontFamily: 'SFUIText',
               ),
             ),

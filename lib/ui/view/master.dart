@@ -2,6 +2,7 @@ import 'package:app/models/audio_player_tile/audio_player_list_tile_props.dart';
 import 'package:app/models/song/Song.dart';
 import 'package:app/route_generator.dart';
 import 'package:app/services/db_service.dart';
+import 'package:app/ui/feedback/feedback_dialog.dart';
 import 'package:app/ui/search/widgets/audio_player_list_tile.dart';
 import 'package:app/ui/widgets/custom_scaffold.dart';
 import 'package:app/utils/routes.dart';
@@ -9,16 +10,31 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
+class ViewAllTracksParams {
+  final bool isAdmin;
+
+  ViewAllTracksParams({required this.isAdmin});
+}
+
 class ViewAllTracks extends StatelessWidget {
+  final ViewAllTracksParams params;
+
   final ValueNotifier<AudioPlayerListTileProps> audioPlayerNotifier =
       ValueNotifier(AudioPlayerListTileProps());
 
-  ViewAllTracks({super.key});
+  ViewAllTracks({super.key, required this.params});
 
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
       title: "View All Tracks",
+      actions: [
+        if(!params.isAdmin)
+          TextButton(
+            child: const Text("Feedback"),
+            onPressed: () => FeedbackDialog.show(context: context),
+          )
+      ],
       fab: FloatingActionButton(
         onPressed: () => context.push(Routes.SEARCH_TRACKS.value),
         shape: const CircleBorder(),
@@ -51,12 +67,15 @@ class ViewAllTracks extends StatelessWidget {
                   return AudioPlayerListTile(
                     audioPlayerListTileProps: audioPlayerNotifier,
                     song: song,
-                    trailing: IconButton(
-                      onPressed: () {
-                        Get.find<DbService>().deleteSong(song.id);
-                      },
-                      icon: const Icon(Icons.delete),
-                    ),
+                    isDisabled: !params.isAdmin,
+                    trailing: params.isAdmin
+                        ? IconButton(
+                            onPressed: () {
+                              Get.find<DbService>().deleteSong(song.id);
+                            },
+                            icon: const Icon(Icons.delete),
+                          )
+                        : null,
                   );
                 },
               );

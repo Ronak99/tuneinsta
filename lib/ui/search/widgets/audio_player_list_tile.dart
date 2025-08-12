@@ -10,12 +10,14 @@ import 'package:just_audio/just_audio.dart';
 
 class AudioPlayerListTile extends StatefulWidget {
   final Song song;
+  final bool isDisabled;
   final Widget? trailing;
   final ValueNotifier<AudioPlayerListTileProps> audioPlayerListTileProps;
 
   const AudioPlayerListTile({
     super.key,
     required this.song,
+    this.isDisabled = false,
     this.trailing,
     required this.audioPlayerListTileProps,
   });
@@ -70,6 +72,7 @@ class _AudioPlayerListTileState extends State<AudioPlayerListTile> {
           ),
           GestureDetector(
             onTap: () async {
+              if(widget.isDisabled) return;
               widget.audioPlayerListTileProps.value = await widget
                   .audioPlayerListTileProps.value
                   .disposePlayer(widget.song.id);

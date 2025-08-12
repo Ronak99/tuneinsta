@@ -8,17 +8,20 @@ import 'package:logger/logger.dart';
 class DbService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  String? _password;
+  String? _adminPassword;
+  String? _testerPassword;
 
-  String? get password => _password;
+  String? get adminPassword => _adminPassword;
+  String? get testerPassword => _testerPassword;
 
   DbService() {
     _iniializeAdminPassword();
   }
 
   void _iniializeAdminPassword() async {
-    _password =
-        (await _firestore.doc('admin_config/password').get()).get("password");
+    DocumentSnapshot<Map<String, dynamic>> data = await _firestore.doc('admin_config/credentials').get();
+    _adminPassword = data['admin'];
+    _testerPassword = data['tester'];
   }
 
   CollectionReference<Task> get taskCollectionReference =>
@@ -94,4 +97,6 @@ class DbService {
 
   void deleteSong(String songId) =>
       songCollectionReference.doc(songId).delete();
+
+  void saveFeedback({required String email, required String feedback}) => _firestore.collection('feedback').add({'email': email, 'feedback': feedback});
 }

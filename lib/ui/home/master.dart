@@ -4,6 +4,7 @@ import 'package:app/ui/home/state/home_cubit.dart';
 import 'package:app/ui/home/state/home_state.dart';
 import 'package:app/ui/home/widgets/task_card.dart';
 import 'package:app/ui/image/state/image_cubit.dart';
+import 'package:app/ui/view/master.dart';
 import 'package:app/ui/widgets/custom_scaffold.dart';
 import 'package:app/utils/routes.dart';
 import 'package:easy_debounce/easy_debounce.dart';
@@ -41,29 +42,36 @@ class HomePage extends StatelessWidget {
       actions: [
         if (kDebugMode)
           TextButton(
-            onPressed: () => context.push(Routes.VIEW_ALL_TRACKS.value),
+            onPressed: () => context.push(Routes.VIEW_ALL_TRACKS.value, extra: ViewAllTracksParams(isAdmin: true)),
             child: const Text("View"),
           ),
         ValueListenableBuilder<bool>(
-            valueListenable: showPasswordField,
-            builder: (context, state, child) {
-              if (state) {
-                return child!;
-              }
-              return const SizedBox.shrink();
-            },
-            child: Expanded(
-              child: TextField(
-                decoration: const InputDecoration(hintText: 'Password'),
-                onSubmitted: (value) {
-                  if (value == Get.find<DbService>().password) {
-                    context.push(Routes.VIEW_ALL_TRACKS.value);
-                    showPasswordField.value = false;
-                  }
-                },
-              ),
+          valueListenable: showPasswordField,
+          builder: (context, state, child) {
+            if (state) {
+              return child!;
+            }
+            return const SizedBox.shrink();
+          },
+          child: Expanded(
+            child: TextField(
+              decoration: const InputDecoration(hintText: 'Password'),
+              onSubmitted: (value) {
+                final dbService = Get.find<DbService>();
+                if (value == dbService.adminPassword ||
+                    value == dbService.testerPassword) {
+                  context.push(
+                    Routes.VIEW_ALL_TRACKS.value,
+                    extra: ViewAllTracksParams(
+                      isAdmin: value == dbService.adminPassword,
+                    ),
+                  );
+                  showPasswordField.value = false;
+                }
+              },
             ),
           ),
+        ),
       ],
       title: "Tuneinsta",
       onTitleTap: () {
