@@ -9,6 +9,6 @@ Give it a shot, [download apk](https://github.com/Ronak99/tuneinsta/raw/refs/hea
 ## Video Demonstration
 
 <video width="1920" height="1080" controls>
-  <source src="https://github.com/Ronak99/tuneinsta/blob/main/screengrabs/video.mov" type="video/mp4">
+  <source src="https://github.com/Ronak99/tuneinsta/blob/main/screengrabs/video.mov" type="video/mov">
 </video>
 
