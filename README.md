@@ -4,7 +4,7 @@ App that suggests amazing songs for your picture perfect moment.
 
 Give it a shot, [download apk](screengrabs/app-release.apk).
 
-![Screen shorts](screengrabs/image.png)
+![Screenshots](screengrabs/image.png)
 
 ## Video Demonstration
 
