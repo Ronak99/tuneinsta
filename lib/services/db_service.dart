@@ -12,6 +12,7 @@ class DbService {
   String? _testerPassword;
 
   String? get adminPassword => _adminPassword;
+
   String? get testerPassword => _testerPassword;
 
   DbService() {
@@ -19,7 +20,8 @@ class DbService {
   }
 
   void _iniializeAdminPassword() async {
-    DocumentSnapshot<Map<String, dynamic>> data = await _firestore.doc('admin_config/credentials').get();
+    DocumentSnapshot<Map<String, dynamic>> data =
+        await _firestore.doc('admin_config/credentials').get();
     _adminPassword = data['admin'];
     _testerPassword = data['tester'];
   }
@@ -84,7 +86,10 @@ class DbService {
 
   Future<void> addSong(Song song) async {
     try {
-      _firestore.collection('backup_songs').doc(song.id).set(song.toJson(), SetOptions(merge: true),);
+      _firestore.collection('backup_songs').doc(song.id).set(
+            song.toJson(),
+            SetOptions(merge: true),
+          );
       await songCollectionReference.doc(song.id).set(
             song,
             SetOptions(merge: true),
@@ -98,5 +103,10 @@ class DbService {
   void deleteSong(String songId) =>
       songCollectionReference.doc(songId).delete();
 
-  void saveFeedback({required String email, required String feedback}) => _firestore.collection('feedback').add({'email': email, 'feedback': feedback});
+  void saveFeedback({required String email, required String feedback}) =>
+      _firestore.collection('feedback').add({
+        'email': email,
+        'feedback': feedback,
+        'created_on': DateTime.now(),
+      });
 }
