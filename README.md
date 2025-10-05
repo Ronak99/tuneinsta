@@ -2,7 +2,7 @@
 
 App that suggests amazing songs for your picture perfect moment.
 
-Give it a shot, [download apk](screengrabs/app-release.apk).
+Give it a shot, [download apk](https://github.com/Ronak99/tuneinsta/raw/refs/heads/main/screengrabs/app-release.apk).
 
 ![Screenshots](screengrabs/image.png)
 
