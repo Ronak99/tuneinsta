@@ -1,16 +1,13 @@
-# app
+# Tuneinsta App
 
-A new Flutter project.
+App that suggests amazing songs for your picture perfect moment.
 
-## Getting Started
+Give it a shot, [download apk](screengrabs/app-release.apk).
 
-This project is a starting point for a Flutter application.
+![Screen shorts](screengrabs/image.png)
 
-A few resources to get you started if this is your first Flutter project:
+## Video Demonstration
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<video width="1920" height="1080" controls>
+  <source src="./screengrabs/video.mov" type="video/mp4">
+</video>
