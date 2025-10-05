@@ -46,7 +46,7 @@ class CustomScaffold extends StatelessWidget {
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
         ),
-        child: body,
+        child: SafeArea(child: body),
       ),
     );
   }

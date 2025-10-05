@@ -16,7 +16,7 @@ class ShareChipView extends StatelessWidget {
 
     List<AppShare> appList = Get.find<ShareService>().apps;
 
-    Widget _buildChip({
+    Widget buildChip({
       required bool shouldShow,
       required int index,
       required AppShare app,
@@ -108,7 +108,7 @@ class ShareChipView extends StatelessWidget {
                     children: appList.map((app) {
                       int index = appList.indexOf(app);
                       return Expanded(
-                        child: _buildChip(
+                        child: buildChip(
                           shouldShow: shouldShow,
                           index: index,
                           app: app,
@@ -125,7 +125,7 @@ class ShareChipView extends StatelessWidget {
                   itemCount: appList.length,
                   padding: const EdgeInsets.only(left: 16),
                   itemBuilder: (context, index) {
-                    return _buildChip(
+                    return buildChip(
                       shouldShow: shouldShow,
                       index: index,
                       app: appList[index],
