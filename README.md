@@ -9,5 +9,6 @@ Give it a shot, [download apk](screengrabs/app-release.apk).
 ## Video Demonstration
 
 <video width="1920" height="1080" controls>
-  <source src="./screengrabs/video.mov" type="video/mp4">
+  <source src="https://github.com/Ronak99/tuneinsta/blob/main/screengrabs/video.mov" type="video/mp4">
 </video>
+
